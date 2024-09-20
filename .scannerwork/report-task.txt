@@ -1,6 +1,6 @@
-projectKey=StaticTestGolfProject
+projectKey=StaticTestGolfProjectV1
 serverUrl=http://localhost:9000
 serverVersion=10.6.0.92116
-dashboardUrl=http://localhost:9000/dashboard?id=StaticTestGolfProject
-ceTaskId=b3dd3465-e3ba-49b8-b6f0-eb41971cfced
-ceTaskUrl=http://localhost:9000/api/ce/task?id=b3dd3465-e3ba-49b8-b6f0-eb41971cfced
+dashboardUrl=http://localhost:9000/dashboard?id=StaticTestGolfProjectV1
+ceTaskId=2fd63f91-3b3b-4202-a71a-b1092a4d691a
+ceTaskUrl=http://localhost:9000/api/ce/task?id=2fd63f91-3b3b-4202-a71a-b1092a4d691a
