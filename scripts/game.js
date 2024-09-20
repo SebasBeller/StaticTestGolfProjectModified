@@ -87,10 +87,9 @@ require(["ramda", "webgl_helpers", "functional_utils"], function(r, w, fun) {
         var mul2 = function(a, b) {
             var tb = transpose(b);
             var result = [];
-            for (var i = 0; i < a.length; i++) {
-                var row = a[i];
-                for (var j = 0; j < tb.length; j++) {
-                    var col = tb[j];
+
+            for (const row of a) {
+                for (const col of tb) {
                     result.push(dot(row, col));
                 }
             }
