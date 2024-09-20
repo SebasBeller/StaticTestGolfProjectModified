@@ -6284,46 +6284,52 @@
     // The algorithm used to handle cyclic structures is
     // inspired by underscore's isEqual
     // RegExp equality algorithm: http://stackoverflow.com/a/10776635
-    var _eqDeep = function _eqDeep(a, b, stackA, stackB) {
-        var typeA = type(a);
-        if (typeA !== type(b)) {
-            return false;
+    const _eqDeep = (a, b, stackA = [], stackB = []) => {
+        const typeA = type(a);
+
+        if (typeA !== type(b)) return false;
+        if (eq(a, b)) return true;
+
+        if (typeA === 'RegExp') {
+            return isRegExpEqual(a, b);
         }
-        if (eq(a, b)) {
-            return true;
+
+        if (Object(a) !== a) return false;
+
+        if (typeA === 'Date') {
+            return a.getTime() === b.getTime();
         }
-        if (typeA == 'RegExp') {
-            // RegExp equality algorithm: http://stackoverflow.com/a/10776635
-            return a.source === b.source && a.global === b.global && a.ignoreCase === b.ignoreCase && a.multiline === b.multiline && a.sticky === b.sticky && a.unicode === b.unicode;
-        }
-        if (Object(a) === a) {
-            if (typeA === 'Date' && a.getTime() != b.getTime()) {
-                return false;
-            }
-            var keysA = keys(a);
-            if (keysA.length !== keys(b).length) {
-                return false;
-            }
-            var idx = stackA.length;
-            while (--idx >= 0) {
-                if (stackA[idx] === a) {
-                    return stackB[idx] === b;
-                }
-            }
-            stackA[stackA.length] = a;
-            stackB[stackB.length] = b;
-            idx = keysA.length;
-            while (--idx >= 0) {
-                var key = keysA[idx];
-                if (!_has(key, b) || !_eqDeep(b[key], a[key], stackA, stackB)) {
-                    return false;
-                }
-            }
-            stackA.pop();
-            stackB.pop();
-            return true;
-        }
-        return false;
+
+        const keysA = keys(a);
+        if (keysA.length !== keys(b).length) return false;
+
+        if (isCircularReference(a, b, stackA, stackB)) return true;
+
+        stackA.push(a);
+        stackB.push(b);
+
+        const areAllPropertiesEqual = keysA.every(key =>
+            _has(key, b) && _eqDeep(b[key], a[key], stackA, stackB)
+        );
+
+        stackA.pop();
+        stackB.pop();
+
+        return areAllPropertiesEqual;
+    };
+
+    const isRegExpEqual = (a, b) => {
+        return a.source === b.source &&
+            a.global === b.global &&
+            a.ignoreCase === b.ignoreCase &&
+            a.multiline === b.multiline &&
+            a.sticky === b.sticky &&
+            a.unicode === b.unicode;
+    };
+
+    const isCircularReference = (a, b, stackA, stackB) => {
+        const index = stackA.findIndex(item => item === a);
+        return index !== -1 && stackB[index] === b;
     };
 
     /**
