@@ -6367,17 +6367,25 @@
         // Return a function which will call the predicates with the provided arguments
     var _predicateWrap = function _predicateWrap(predPicker) {
             return function (preds) {
-                var predIterator = function () {
-                    var args = arguments;
-                    return predPicker(function (predicate) {
-                        return predicate.apply(null, args);
-                    }, preds);
-                };
-                return arguments.length > 1 ? // Call function immediately if given arguments
-                    predIterator.apply(null, _slice(arguments, 1)) : // Return a function which will call the predicates with the provided arguments
-                    arity(max(_pluck('length', preds)), predIterator);
+                return arguments.length > 1
+                    ? invokePredicates(preds, _slice(arguments, 1))
+                    : arity(max(_pluck('length', preds)), createPredIterator(preds));
             };
+
+            function invokePredicates(preds, args) {
+                return predPicker(function (predicate) {
+                    return predicate.apply(null, args);
+                }, preds);
+            }
+
+            function createPredIterator(preds) {
+                return function () {
+                    var args = arguments;
+                    return invokePredicates(preds, args);
+                };
+            }
         };
+
 
     // Function, RegExp, user-defined types
     var _toString = function _toString(x, seen) {
