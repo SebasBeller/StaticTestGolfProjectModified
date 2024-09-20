@@ -188,7 +188,8 @@ require(["ramda", "webgl_helpers", "functional_utils"], function(r, w, fun) {
     };
 
     var chance = function(chance) {
-        return rand(1) < chance ? true : false;
+        return rand(1) < chance;
+
     };
 
     var randomPoint = function() {
