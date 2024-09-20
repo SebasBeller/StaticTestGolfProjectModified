@@ -214,18 +214,14 @@
                 return functionForCurryTwo;
             } else if (n === 1 && a === placeholder) {
                 return functionForCurryTwo;
-            } else if (n === 1) {
-                return _curry1(function (b) {
-                    return functionForCurryOne(a, b);
-                });
-            } else if (n === 2 && a === placeholder && b === placeholder) {
+            }  else if (n === 2 && (a === placeholder && b === placeholder)) {
                 return functionForCurryTwo;
-            } else if (n === 2 && a === placeholder) {
-                return _curry1(function (a) {
+            } else if (n === 1 || (n === 2 && b === placeholder)) {
+                return _curry1(function (b) {
                     return functionForCurryOne(a, b);
                 });
-            } else if (n === 2 && b === placeholder) {
-                return _curry1(function (b) {
+            }else if (n === 2 && a === placeholder) {
+                return _curry1(function (a) {
                     return functionForCurryOne(a, b);
                 });
             } else {
