@@ -390,7 +390,7 @@
     };
 
     var _has = function _has(prop, obj) {
-        return Object.prototype.hasOwnProperty.call(obj, prop);
+        return Object.hasOwn(obj, prop);
     };
 
     var _identity = function _identity(x) {
