@@ -6,7 +6,7 @@ define(["ramda"], function(r) {
     u.map = function(f) {
         var result = [];
         var lists = r.drop(1, arguments);
-        for (var i = 0; true; i++) {
+        for (var i = 0; i < Math.min(...lists.map(list => list.length)); i++) {
             var currents = r.map(r.nth(i), lists);
             if (r.all(r.compose(r.not, r.isNil), currents)) {
                 result.push(r.apply(f, currents))
@@ -14,6 +14,7 @@ define(["ramda"], function(r) {
                 return result;
             }
         }
+        return result;
     };
 
     u.updateNumber = function(index, change, array) {
