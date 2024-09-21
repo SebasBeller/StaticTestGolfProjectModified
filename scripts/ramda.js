@@ -7405,7 +7405,7 @@
         is: is,
         isArrayLike: isArrayLike,
         isEmpty: isEmpty,
-        isNaN: isNaN,
+        isNaN: Number.isNaN,
         isNil: isNil,
         isSet: isSet,
         join: join,
