@@ -1066,7 +1066,7 @@
      * @memberOf R
      * @category Function
      * @sig (a, b -> Boolean) -> (a, b -> Number)
-     * @param {Function} compareFunction A predicate function of arity two.
+     * @param {Function} isGreaterThan A predicate function of arity two.
      * @return {Function} A Function :: a -> b -> Int that returns `-1` if a < b, `1` if b < a, otherwise `0`.
      * @example
      *
@@ -1078,10 +1078,10 @@
      *      ];
      *      R.sort(cmp, people);
      */
-    var comparator = _curry1(function comparator(compareFunction) {
+    var comparator = _curry1(function comparator(isGreaterThan) {
         return function (a, b) {
-            if (compareFunction(a,b))return -1;
-            if (compareFunction(b,a)) return 1;
+            if (isGreaterThan(a,b))return -1;
+            if (isGreaterThan(b,a)) return 1;
             return 0;
         };
     });
