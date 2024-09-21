@@ -1066,7 +1066,7 @@
      * @memberOf R
      * @category Function
      * @sig (a, b -> Boolean) -> (a, b -> Number)
-     * @param {Function} pred A predicate function of arity two.
+     * @param {Function} compareFunction A predicate function of arity two.
      * @return {Function} A Function :: a -> b -> Int that returns `-1` if a < b, `1` if b < a, otherwise `0`.
      * @example
      *
@@ -1078,9 +1078,11 @@
      *      ];
      *      R.sort(cmp, people);
      */
-    var comparator = _curry1(function comparator(pred) {
+    var comparator = _curry1(function comparator(compareFunction) {
         return function (a, b) {
-            return pred(a, b) ? -1 : pred(b, a) ? 1 : 0;
+            if (compareFunction(a,b))return -1;
+            if (compareFunction(b,a)) return 1;
+            return 0;
         };
     });
 
