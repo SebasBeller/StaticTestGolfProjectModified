@@ -338,7 +338,7 @@
         if (a === 0) {
             return 1 / a === 1 / b;
         } else {
-            return a === b || a !== a && b !== b;
+            return a === b || (Number.isNaN(a) && Number.isNaN(b));
         }
     };
 
@@ -520,7 +520,7 @@
     };
 
     var _reduced = function (x) {
-        return x && x['@@transducer/reduced'] ? x : {
+        return x?.['@@transducer/reduced'] ? x : {
             '@@transducer/value': x,
             '@@transducer/reduced': true
         };
@@ -3591,7 +3591,7 @@
     var unfold = _curry2(function unfold(functionForCurryOne, seed) {
         var pair = functionForCurryOne(seed);
         var result = [];
-        while (pair && pair.length) {
+        while (pair?.length) {
             result[result.length] = pair[0];
             pair = functionForCurryOne(pair[1]);
         }
@@ -4170,8 +4170,8 @@
             var idx = -1, len = list.length;
             while (++idx < len) {
                 acc = xf['@@transducer/step'](acc, list[idx]);
-                if (acc && acc['@@transducer/reduced']) {
-                    acc = acc['@@transducer/value'];
+                if (acc?.['@@transducer/reduced']) {
+                    acc = acc?.['@@transducer/value'];
                     break;
                 }
             }
@@ -4181,8 +4181,8 @@
             var step = iter.next();
             while (!step.done) {
                 acc = xf['@@transducer/step'](acc, step.value);
-                if (acc && acc['@@transducer/reduced']) {
-                    acc = acc['@@transducer/value'];
+                if (acc?.['@@transducer/reduced']) {
+                    acc = acc?.['@@transducer/value'];
                     break;
                 }
                 step = iter.next();
@@ -4792,13 +4792,16 @@
      *
      *      R.dropWhile(lteTwo, [1, 2, 3, 4]); //=> [3, 4]
      */
+    
     var dropWhile = _curry2(_dispatchable('dropWhile', _xdropWhile, function dropWhile(pred, list) {
-        var idx = -1, len = list.length;
-        while (++idx < len && pred(list[idx])) {
+        var idx = 0, len = list.length;
+        while (idx < len && pred(list[idx])) {
+            idx++;
         }
         return _slice(list, idx);
     }));
-
+    
+    
     /**
      * `empty` wraps any object in an array. This implementation is compatible with the
      * Fantasy-land Monoid spec, and will work with types that implement that spec.
@@ -6807,11 +6810,15 @@
         while (++idx < len) {
             var key = props[idx];
             var val = obj[key];
-            var list = _has(val, out) ? out[val] : out[val] = [];
+            if (!_has(val, out)) {
+                out[val] = [];
+            }
+            var list = out[val];
             list[list.length] = key;
         }
         return out;
     });
+    
 
     /**
      * Returns a new object with the keys of the given object
@@ -7417,7 +7424,7 @@
         is: is,
         isArrayLike: isArrayLike,
         isEmpty: isEmpty,
-        isNaN: isNaN,
+        isNaN: Number.isNaN,
         isNil: isNil,
         isSet: isSet,
         join: join,
