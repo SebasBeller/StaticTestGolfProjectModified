@@ -1888,9 +1888,10 @@
      *      R.isNaN(undefined);  //=> false
      *      R.isNaN({});         //=> false
      */
-    var isNaN = _curry1(function isNaN(x) {
+    var customIsNaN = _curry1(function customIsNaN(x) {
         return typeof x === 'number' && x !== x;
     });
+    
 
     /**
      * Checks if the input value is `null` or `undefined`.
