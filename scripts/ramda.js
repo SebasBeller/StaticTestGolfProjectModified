@@ -338,7 +338,7 @@
         if (a === 0) {
             return 1 / a === 1 / b;
         } else {
-            return a === b || a !== a && b !== b;
+            return a === b || (Number.isNaN(a) && Number.isNaN(b));
         }
     };
 
