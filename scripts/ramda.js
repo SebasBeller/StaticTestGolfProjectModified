@@ -4786,13 +4786,16 @@
      *
      *      R.dropWhile(lteTwo, [1, 2, 3, 4]); //=> [3, 4]
      */
+    
     var dropWhile = _curry2(_dispatchable('dropWhile', _xdropWhile, function dropWhile(pred, list) {
-        var idx = -1, len = list.length;
-        while (++idx < len && pred(list[idx])) {
+        var idx = 0, len = list.length;
+        while (idx < len && pred(list[idx])) {
+            idx++;
         }
         return _slice(list, idx);
     }));
-
+    
+    
     /**
      * `empty` wraps any object in an array. This implementation is compatible with the
      * Fantasy-land Monoid spec, and will work with types that implement that spec.
