@@ -6798,11 +6798,15 @@
         while (++idx < len) {
             var key = props[idx];
             var val = obj[key];
-            var list = _has(val, out) ? out[val] : out[val] = [];
+            if (!_has(val, out)) {
+                out[val] = [];
+            }
+            var list = out[val];
             list[list.length] = key;
         }
         return out;
     });
+    
 
     /**
      * Returns a new object with the keys of the given object
