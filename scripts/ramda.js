@@ -520,7 +520,7 @@
     };
 
     var _reduced = function (x) {
-        return x && x['@@transducer/reduced'] ? x : {
+        return x?.['@@transducer/reduced'] ? x : {
             '@@transducer/value': x,
             '@@transducer/reduced': true
         };
@@ -3585,7 +3585,7 @@
     var unfold = _curry2(function unfold(functionForCurryOne, seed) {
         var pair = functionForCurryOne(seed);
         var result = [];
-        while (pair && pair.length) {
+        while (pair?.length) {
             result[result.length] = pair[0];
             pair = functionForCurryOne(pair[1]);
         }
@@ -4164,8 +4164,8 @@
             var idx = -1, len = list.length;
             while (++idx < len) {
                 acc = xf['@@transducer/step'](acc, list[idx]);
-                if (acc && acc['@@transducer/reduced']) {
-                    acc = acc['@@transducer/value'];
+                if (acc?.['@@transducer/reduced']) {
+                    acc = acc?.['@@transducer/value'];
                     break;
                 }
             }
@@ -4175,8 +4175,8 @@
             var step = iter.next();
             while (!step.done) {
                 acc = xf['@@transducer/step'](acc, step.value);
-                if (acc && acc['@@transducer/reduced']) {
-                    acc = acc['@@transducer/value'];
+                if (acc?.['@@transducer/reduced']) {
+                    acc = acc?.['@@transducer/value'];
                     break;
                 }
                 step = iter.next();
