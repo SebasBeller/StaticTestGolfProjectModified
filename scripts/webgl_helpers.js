@@ -13,7 +13,7 @@ define(function() {
         }
         return shader;
     };
-
+    
     w.createProgram = function(gl, vertexShader, fragmentShader) {
         var program = gl.createProgram();
         gl.attachShader(program, vertexShader);
@@ -25,6 +25,7 @@ define(function() {
         }
         return program;
     };
+
 
     w.shaderFromScript = function(gl, scriptId, opt_shaderType) {
         var shaderText = document.getElementById(scriptId).text;
