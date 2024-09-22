@@ -3977,7 +3977,9 @@
                 return functionForCurryOne();
             }
             var obj = arguments[length - 1];
-            return _isArray(obj) || typeof obj[methodname] !== 'function' ? functionForCurryOne.apply(this, arguments) : obj[methodname].apply(obj, _slice(arguments, 0, length - 1));
+            return _isArray(obj) || typeof obj[methodname] !== 'function' 
+            ? functionForCurryOne(...arguments)
+            : obj[methodname](..._slice(arguments, 0, length - 1));
         };
     };
 
@@ -4102,14 +4104,14 @@
             if (!_isArray(obj)) {
                 var args = _slice(arguments, 0, length - 1);
                 if (typeof obj[methodname] === 'function') {
-                    return obj[methodname].apply(obj, args);
+                    return obj[methodname](args);
                 }
                 if (_isTransformer(obj)) {
-                    var transducer = xf.apply(null, args);
+                    var transducer = xf(...args);
                     return transducer(obj);
                 }
             }
-            return functionForCurryOne.apply(this, arguments);
+            return functionForCurryOne(...arguments);
         };
     };
 
@@ -5221,7 +5223,7 @@
      *      toBinary(63); //=> '111111'
      */
     var invoke = curry(function invoke(methodName, args, obj) {
-        return obj[methodName].apply(obj, args);
+        return obj[methodName](...args);
     });
 
     /**
@@ -5252,7 +5254,7 @@
         return curryN(len + 1, function () {
             var target = arguments[len];
             var args = initialArgs.concat(_slice(arguments, 0, len));
-            return target[method].apply(target, args);
+            return target[method](...args);
         });
     });
 
@@ -6383,7 +6385,7 @@
 
             function invokePredicates(preds, args) {
                 return predPicker(function (predicate) {
-                    return predicate.apply(null, args);
+                    return predicate(...args);
                 }, preds);
             }
 
