@@ -9,7 +9,7 @@ define(function() {
         gl.compileShader(shader);
         var success = gl.getShaderParameter(shader, gl.COMPILE_STATUS);
         if (!success) {
-            throw "could not compile shader:" + gl.getShaderInfoLog(shader);
+            throw new Error("could not compile shader:" + gl.getShaderInfoLog(shader));
         }
         return shader;
     };
@@ -21,7 +21,7 @@ define(function() {
         gl.linkProgram(program);
         var success = gl.getProgramParameter(program, gl.LINK_STATUS);
         if (!success) {
-            throw ("program failed to link:" + gl.getProgramInfoLog(program));
+            throw new Error("program failed to link:" + gl.getProgramInfoLog(program));
         }
         return program;
     };
