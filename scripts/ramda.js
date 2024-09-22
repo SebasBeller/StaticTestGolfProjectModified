@@ -3422,16 +3422,23 @@
      *      R.trim('   xyz  '); //=> 'xyz'
      *      R.map(R.trim, R.split(',', 'x, y, z')); //=> ['x', 'y', 'z']
      */
+    const WHITE_SPACES= '\t\n\x0B\f\r \xA0\u1680\u180E\u2000\u2001\u2002\u2003'
+        + '\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u202F\u205F\u3000\u2028'
+        + '\u2029\uFEFF'
+    function deleteFinalSpaces(str) {
+        let i = str.length - 1;
+        while (i >= 0 && WHITE_SPACES.includes(str[i])) {
+            i--;
+        }
+        return str.slice(0, i + 1);
+    }
+
     var trim = function () {
-        var ws = '\t\n\x0B\f\r \xA0\u1680\u180E\u2000\u2001\u2002\u2003' + '\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u202F\u205F\u3000\u2028' + '\u2029\uFEFF';
         var zeroWidth = '\u200B';
         var hasProtoTrim = typeof String.prototype.trim === 'function';
-        if (!hasProtoTrim || (ws.trim() || !zeroWidth.trim())) {
+        if (!hasProtoTrim || !zeroWidth.trim()) {
             return _curry1(function trim(str) {
-                console.log("HOLAAA")
-                var beginRx = new RegExp('^[' + ws + '][' + ws + ']*');
-                var endRx = new RegExp('[' + ws + '][' + ws + ']*$');
-                return str.replace(beginRx, '').replace(endRx, '');
+                return deleteFinalSpaces(str.replace(/^\s+/, ''));
             });
         } else {
             return _curry1(function trim(str) {
