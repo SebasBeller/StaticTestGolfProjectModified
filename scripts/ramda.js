@@ -2521,7 +2521,7 @@
      * Returns a function which returns its nth argument.
      *
      * @func
-     * @memberOf R
+     * @memberOf R  
      * @category Function
      * @sig Number -> *... -> *
      * @param {Number} n
@@ -2531,7 +2531,7 @@
      *      R.nthArg(1)('a', 'b', 'c'); //=> 'b'
      *      R.nthArg(-1)('a', 'b', 'c'); //=> 'c'
      */
-    var nthArg = _curry1(function nthArg(n) {
+    const nthArg = _curry1(function nthArg(n) {
         return function () {
             return _nth(n, arguments);
         };
@@ -2552,7 +2552,7 @@
      *      R.nthChar(2, 'Ramda'); //=> 'm'
      *      R.nthChar(-2, 'Ramda'); //=> 'd'
      */
-    var nthChar = _curry2(function nthChar(n, str) {
+    const nthChar = _curry2(function nthChar(n, str) {
         return str.charAt(n < 0 ? str.length + n : n);
     });
 
@@ -2571,7 +2571,7 @@
      *      R.nthCharCode(2, 'Ramda'); //=> 'm'.charCodeAt(0)
      *      R.nthCharCode(-2, 'Ramda'); //=> 'd'.charCodeAt(0)
      */
-    var nthCharCode = _curry2(function nthCharCode(n, str) {
+    const nthCharCode = _curry2(function nthCharCode(n, str) {
         return str.charCodeAt(n < 0 ? str.length + n : n);
     });
 
@@ -2592,7 +2592,7 @@
      *      R.of(null); //=> [null]
      *      R.of([42]); //=> [[42]]
      */
-    var of = _curry1(function of(x) {
+    const of = _curry1(function of(x) {
         return [x];
     });
 
@@ -2610,9 +2610,9 @@
      *
      *      R.omit(['a', 'd'], {a: 1, b: 2, c: 3, d: 4}); //=> {b: 2, c: 3}
      */
-    var omit = _curry2(function omit(names, obj) {
-        var result = {};
-        for (var prop in obj) {
+    const omit = _curry2(function omit(names, obj) {
+        let result = {};
+        for (let prop in obj) {
             if (_indexOf(names, prop) < 0) {
                 result[prop] = obj[prop];
             }
@@ -2637,8 +2637,8 @@
      *      addOneOnce(10); //=> 11
      *      addOneOnce(addOneOnce(50)); //=> 11
      */
-    var once = _curry1(function once(functionForCurryOne) {
-        var called = false, result;
+    const once = _curry1(function once(functionForCurryOne) {
+        let called = false, result;
         return function () {
             if (called) {
                 return result;
@@ -2662,7 +2662,7 @@
      *
      *      R.path(['a', 'b'], {a: {b: 2}}); //=> 2
      */
-    var path = _curry2(_path);
+    const path = _curry2(_path);
 
     /**
      * Determines whether a nested path on an object has a specific value.
@@ -2689,7 +2689,7 @@
      *      var isFamous = R.pathEq(['address', 'zipCode'], 90210);
      *      R.filter(isFamous, users); //=> [ user1 ]
      */
-    var pathEq = _curry3(function pathEq(path, val, obj) {
+    const pathEq = _curry3(function pathEq(path, val, obj) {
         return _eq(_path(path, obj), val);
     });
 
@@ -2709,9 +2709,9 @@
      *      R.pick(['a', 'd'], {a: 1, b: 2, c: 3, d: 4}); //=> {a: 1, d: 4}
      *      R.pick(['a', 'e', 'f'], {a: 1, b: 2, c: 3, d: 4}); //=> {a: 1}
      */
-    var pick = _curry2(function pick(names, obj) {
-        var result = {};
-        for (var prop in obj) {
+    const pick = _curry2(function pick(names, obj) {
+        let result = {};
+        for (let prop in obj) {
             if (_indexOf(names, prop) >= 0) {
                 result[prop] = obj[prop];
             }
@@ -2735,12 +2735,12 @@
      *      R.pickAll(['a', 'd'], {a: 1, b: 2, c: 3, d: 4}); //=> {a: 1, d: 4}
      *      R.pickAll(['a', 'e', 'f'], {a: 1, b: 2, c: 3, d: 4}); //=> {a: 1, e: undefined, f: undefined}
      */
-    var pickAll = _curry2(function pickAll(names, obj) {
-        var result = {};
-        var idx = -1;
-        var len = names.length;
+    const pickAll = _curry2(function pickAll(names, obj) {
+        let result = {};
+        let idx = -1;
+        let len = names.length;
         while (++idx < len) {
-            var name = names[idx];
+            let name = names[idx];
             result[name] = obj[name];
         }
         return result;
@@ -2765,9 +2765,9 @@
      *      var isUpperCase = function(val, key) { return key.toUpperCase() === key; }
      *      R.pickBy(isUpperCase, {a: 1, b: 2, A: 3, B: 4}); //=> {A: 3, B: 4}
      */
-    var pickBy = _curry2(function pickBy(test, obj) {
-        var result = {};
-        for (var prop in obj) {
+    const pickBy = _curry2(function pickBy(test, obj) {
+        let result = {};
+        for (let prop in obj) {
             if (test(obj[prop], prop, obj)) {
                 result[prop] = obj[prop];
             }
@@ -2790,7 +2790,7 @@
      *
      *      R.prepend('fee', ['fi', 'fo', 'fum']); //=> ['fee', 'fi', 'fo', 'fum']
      */
-    var prepend = _curry2(_prepend);
+    const prepend = _curry2(_prepend);
 
     /**
      * Returns a function that when supplied an object returns the indicated property of that object, if it exists.
@@ -2807,7 +2807,7 @@
      *      R.prop('x', {x: 100}); //=> 100
      *      R.prop('x', {}); //=> undefined
      */
-    var prop = _curry2(function prop(p, obj) {
+    const prop = _curry2(function prop(p, obj) {
         return obj[p];
     });
 
@@ -2835,7 +2835,7 @@
      *      var hasBrownHair = R.propEq('hair', 'brown');
      *      R.filter(hasBrownHair, kids); //=> [fred, rusty]
      */
-    var propEq = _curry3(function propEq(name, val, obj) {
+    const propEq = _curry3(function propEq(name, val, obj) {
         return _eq(obj[name], val);
     });
 
@@ -2864,7 +2864,7 @@
      *      favorite(alice);  //=> undefined
      *      favoriteWithDefault(alice);  //=> 'Ramda'
      */
-    var propOr = _curry3(function propOr(val, p, obj) {
+    const propOr = _curry3(function propOr(val, p, obj) {
         return _has(p, obj) ? obj[p] : val;
     });
 
@@ -2886,10 +2886,10 @@
      *      var fullName = R.compose(R.join(' '), R.props(['first', 'last']));
      *      fullName({last: 'Bullet-Tooth', age: 33, first: 'Tony'}); //=> 'Tony Bullet-Tooth'
      */
-    var props = _curry2(function props(ps, obj) {
-        var len = ps.length;
-        var out = [];
-        var idx = -1;
+    const props = _curry2(function props(ps, obj) {
+        let len = ps.length;
+        let out = [];
+        let idx = -1;
         while (++idx < len) {
             out[idx] = obj[ps[idx]];
         }
@@ -2912,9 +2912,9 @@
      *      R.range(1, 5);    //=> [1, 2, 3, 4]
      *      R.range(50, 53);  //=> [50, 51, 52]
      */
-    var range = _curry2(function range(from, to) {
-        var result = [];
-        var n = from;
+    const range = _curry2(function range(from, to) {
+        let result = [];
+        let n = from;
         while (n < to) {
             result[result.length] = n;
             n += 1;
@@ -2951,8 +2951,8 @@
      *
      *      R.reduceIndexed(objectify, {}, letters); //=> { 'a': 0, 'b': 1, 'c': 2 }
      */
-    var reduceIndexed = _curry3(function reduceIndexed(functionForCurryOne, acc, list) {
-        var idx = -1, len = list.length;
+    const reduceIndexed = _curry3(function reduceIndexed(functionForCurryOne, acc, list) {
+        let idx = -1, len = list.length;
         while (++idx < len) {
             acc = functionForCurryOne(acc, list[idx], idx, list);
         }
@@ -2990,8 +2990,8 @@
      *
      *      R.reduceRight(flattenPairs, [], pairs); //=> [ 'c', 3, 'b', 2, 'a', 1 ]
      */
-    var reduceRight = _curry3(function reduceRight(functionForCurryOne, acc, list) {
-        var idx = list.length;
+    const reduceRight = _curry3(function reduceRight(functionForCurryOne, acc, list) {
+        let idx = list.length;
         while (--idx >= 0) {
             acc = functionForCurryOne(acc, list[idx]);
         }
@@ -3028,8 +3028,8 @@
      *
      *      R.reduceRightIndexed(objectify, {}, letters); //=> { 'c': 2, 'b': 1, 'a': 0 }
      */
-    var reduceRightIndexed = _curry3(function reduceRightIndexed(functionForCurryOne, acc, list) {
-        var idx = list.length;
+    const reduceRightIndexed = _curry3(function reduceRightIndexed(functionForCurryOne, acc, list) {
+        let idx = list.length;
         while (--idx >= 0) {
             acc = functionForCurryOne(acc, list[idx], idx, list);
         }
@@ -3055,7 +3055,7 @@
      *
      *      R.rejectIndexed(lastTwo, [8, 6, 7, 5, 3, 0, 9]); //=> [8, 6, 7, 5, 3]
      */
-    var rejectIndexed = _curry2(function rejectIndexed(functionForCurryOne, list) {
+    const rejectIndexed = _curry2(function rejectIndexed(functionForCurryOne, list) {
         return _filterIndexed(_complement(functionForCurryOne), list);
     });
 
@@ -3077,7 +3077,7 @@
      *
      *      R.remove(2, 3, [1,2,3,4,5,6,7,8]); //=> [1,2,6,7,8]
      */
-    var remove = _curry3(function remove(start, count, list) {
+    const remove = _curry3(function remove(start, count, list) {
         return _concat(_slice(list, 0, Math.min(start, list.length)), _slice(list, Math.min(list.length, start + count)));
     });
 
@@ -3100,7 +3100,7 @@
      *      // Use the "g" (global) flag to replace all occurrences:
      *      R.replace(/foo/g, 'bar', 'foo foo foo'); //=> 'bar bar bar'
      */
-    var replace = _curry3(function replace(regex, replacement, str) {
+    const replace = _curry3(function replace(regex, replacement, str) {
         return str.replace(regex, replacement);
     });
 
@@ -3121,7 +3121,7 @@
      *      R.reverse([1]);        //=> [1]
      *      R.reverse([]);         //=> []
      */
-    var reverse = _curry1(function reverse(list) {
+    const reverse = _curry1(function reverse(list) {
         return _slice(list).reverse();
     });
 
@@ -3142,8 +3142,8 @@
      *      var numbers = [1, 2, 3, 4];
      *      var factorials = R.scan(R.multiply, 1, numbers); //=> [1, 1, 2, 6, 24]
      */
-    var scan = _curry3(function scan(functionForCurryOne, acc, list) {
-        var idx = 0, len = list.length + 1, result = [acc];
+    const scan = _curry3(function scan(functionForCurryOne, acc, list) {
+        let idx = 0, len = list.length + 1, result = [acc];
         while (++idx < len) {
             acc = functionForCurryOne(acc, list[idx - 1]);
             result[idx] = acc;
@@ -3168,7 +3168,7 @@
      *      var diff = function(a, b) { return a - b; };
      *      R.sort(diff, [4,2,7,5]); //=> [2, 4, 5, 7]
      */
-    var sort = _curry2(function sort(comparator, list) {
+    const sort = _curry2(function sort(comparator, list) {
         return _slice(list).sort(comparator);
     });
 
@@ -3211,10 +3211,10 @@
         return valueOne < valueTwo ? -1 : 0
     }
 
-    var sortBy = _curry2(function sortBy(functionForCurryOne, list) {
+    const sortBy = _curry2(function sortBy(functionForCurryOne, list) {
         return _slice(list).sort(function (value, nextValue) {
-            var caseInsensitiveValue = functionForCurryOne(value);
-            var caseInsensitiveNextValue = functionForCurryOne(nextValue);
+            let caseInsensitiveValue = functionForCurryOne(value);
+            let caseInsensitiveNextValue = functionForCurryOne(nextValue);
             return isValueGraterThan(caseInsensitiveValue,caseInsensitiveNextValue)
         });
     });
@@ -3233,7 +3233,7 @@
      *
      *      R.strIndexOf('c', 'abcdefg'); //=> 2
      */
-    var strIndexOf = _curry2(function strIndexOf(c, str) {
+    const strIndexOf = _curry2(function strIndexOf(c, str) {
         return str.indexOf(c);
     });
 
@@ -3252,7 +3252,7 @@
      *
      *      R.strLastIndexOf('a', 'banana split'); //=> 5
      */
-    var strLastIndexOf = _curry2(function (c, str) {
+    const strLastIndexOf = _curry2(function (c, str) {
         return str.lastIndexOf(c);
     });
 
@@ -3277,7 +3277,7 @@
      *      complementaryAngle(30); //=> 60
      *      complementaryAngle(72); //=> 18
      */
-    var subtract = _curry2(function subtract(a, b) {
+    const subtract = _curry2(function subtract(a, b) {
         return a - b;
     });
 
@@ -3297,7 +3297,7 @@
      *      R.tap(sayX, 100); //=> 100
      *      //-> 'x is 100'
      */
-    var tap = _curry2(function tap(functionForCurryOne, x) {
+    const tap = _curry2(function tap(functionForCurryOne, x) {
         functionForCurryOne(x);
         return x;
     });
@@ -3317,7 +3317,7 @@
      *      R.test(/^x/, 'xyz'); //=> true
      *      R.test(/^y/, 'xyz'); //=> false
      */
-    var test = _curry2(function test(pattern, str) {
+    const test = _curry2(function test(pattern, str) {
         return _cloneRegExp(pattern).test(str);
     });
 
@@ -3339,10 +3339,10 @@
      *
      *      R.times(R.identity, 5); //=> [0, 1, 2, 3, 4]
      */
-    var times = _curry2(function times(functionForCurryOne, n) {
-        var len = Number(n);
-        var list = new Array(len);
-        var idx = 0;
+    const times = _curry2(function times(functionForCurryOne, n) {
+        let len = Number(n);
+        let list = new Array(len);
+        let idx = 0;
         while (idx < len) {
             list[idx] = functionForCurryOne(idx);
             idx += 1;
@@ -3366,9 +3366,9 @@
      *
      *      R.toPairs({a: 1, b: 2, c: 3}); //=> [['a', 1], ['b', 2], ['c', 3]]
      */
-    var toPairs = _curry1(function toPairs(obj) {
-        var pairs = [];
-        for (var prop in obj) {
+    const toPairs = _curry1(function toPairs(obj) {
+        let pairs = [];
+        for (let prop in obj) {
             if (_has(prop, obj)) {
                 pairs[pairs.length] = [
                     prop,
@@ -3399,9 +3399,9 @@
      *      var f = new F();
      *      R.toPairsIn(f); //=> [['x','X'], ['y','Y']]
      */
-    var toPairsIn = _curry1(function toPairsIn(obj) {
-        var pairs = [];
-        for (var prop in obj) {
+    const toPairsIn = _curry1(function toPairsIn(obj) {
+        let pairs = [];
+        for (let prop in obj) {
             pairs[pairs.length] = [
                 prop,
                 obj[prop]
@@ -3435,9 +3435,9 @@
         return str.slice(0, i + 1);
     }
 
-    var trim = function () {
-        var zeroWidth = '\u200B';
-        var hasProtoTrim = typeof String.prototype.trim === 'function';
+    const trim = function () {
+        let zeroWidth = '\u200B';
+        let hasProtoTrim = typeof String.prototype.trim === 'function';
         if (!hasProtoTrim || !zeroWidth.trim()) {
             return _curry1(function trim(str) {
                 return deleteFinalSpaces(str.replace(/^\s+/, ''));
@@ -3470,7 +3470,7 @@
      *      R.type([]); //=> "Array"
      *      R.type(/[A-z]/); //=> "RegExp"
      */
-    var type = _curry1(function type(value) {
+    const type = _curry1(function type(value) {
         if(value===undefined){
             return 'Undefined';
         }
@@ -3499,7 +3499,7 @@
      *
      *      R.unapply(JSON.stringify)(1, 2, 3); //=> '[1,2,3]'
      */
-    var unapply = _curry1(function unapply(functionForCurryOne) {
+    const unapply = _curry1(function unapply(functionForCurryOne) {
         return function () {
             return functionForCurryOne(_slice(arguments));
         };
@@ -3529,7 +3529,7 @@
      *      // Only 1 argument is passed to the wrapped function
      *      takesOneArg(1, 2); //=> [1, undefined]
      */
-    var unary = _curry1(function unary(functionForCurryOne) {
+    const unary = _curry1(function unary(functionForCurryOne) {
         return nAry(1, functionForCurryOne);
     });
 
@@ -3559,12 +3559,12 @@
      *      var uncurriedAddFour = R.uncurryN(4, addFour);
      *      curriedAddFour(1, 2, 3, 4); //=> 10
      */
-    var uncurryN = _curry2(function uncurryN(depth, functionForCurryOne) {
+    const uncurryN = _curry2(function uncurryN(depth, functionForCurryOne) {
         return curryN(depth, function () {
-            var currentDepth = 1;
-            var value = functionForCurryOne;
-            var idx = 0;
-            var endIdx;
+            let currentDepth = 1;
+            let value = functionForCurryOne;
+            let idx = 0;
+            let endIdx;
             while (currentDepth <= depth && typeof value === 'function') {
                 endIdx = currentDepth === depth ? arguments.length : idx + value.length;
                 value = value.apply(this, _slice(arguments, idx, endIdx));
@@ -3597,9 +3597,9 @@
      *      var f = function(n) { return n > 50 ? false : [-n, n + 10] };
      *      R.unfold(f, 10); //=> [-10, -20, -30, -40, -50]
      */
-    var unfold = _curry2(function unfold(functionForCurryOne, seed) {
-        var pair = functionForCurryOne(seed);
-        var result = [];
+    const unfold = _curry2(function unfold(functionForCurryOne, seed) {
+        let pair = functionForCurryOne(seed);
+        let result = [];
         while (pair?.length) {
             result[result.length] = pair[0];
             pair = functionForCurryOne(pair[1]);
@@ -3627,9 +3627,9 @@
      *      R.uniqWith(strEq)([1, '1', 1]);    //=> [1]
      *      R.uniqWith(strEq)(['1', 1, 1]);    //=> ['1']
      */
-    var uniqWith = _curry2(function uniqWith(pred, list) {
-        var idx = -1, len = list.length;
-        var result = [], item;
+    const uniqWith = _curry2(function uniqWith(pred, list) {
+        let idx = -1, len = list.length;
+        let result = [], item;
         while (++idx < len) {
             item = list[idx];
             if (!_containsWith(pred, item, result)) {
@@ -3656,7 +3656,7 @@
      *      R.update(1, 11, [0, 1, 2]);     //=> [0, 11, 2]
      *      R.update(1)(11)([0, 1, 2]);     //=> [0, 11, 2]
      */
-    var update = _curry3(function (idx, x, list) {
+    const update = _curry3(function (idx, x, list) {
         return adjust(always(x), idx, list);
     });
 
@@ -3679,8 +3679,8 @@
      *      var f = new F();
      *      R.valuesIn(f); //=> ['X', 'Y']
      */
-    var valuesIn = _curry1(function valuesIn(obj) {
-        var prop, vs = [];
+    const valuesIn = _curry1(function valuesIn(obj) {
+        let prop, vs = [];
         for (prop in obj) {
             vs[vs.length] = obj[prop];
         }
@@ -3720,8 +3720,8 @@
      *      pred({a: 'foo', b: 'xxx', x: 10, y: 19}); //=> false
      *      pred({a: 'foo', b: 'xxx', x: 11, y: 20}); //=> false
      */
-    var where = _curry2(function where(spec, testObj) {
-        for (var prop in spec) {
+    const where = _curry2(function where(spec, testObj) {
+        for (let prop in spec) {
             if (_has(prop, spec) && !spec[prop](testObj[prop])) {
                 return false;
             }
@@ -3754,7 +3754,7 @@
      *      });
      *      shortenedGreet("Robert"); //=> "Hello Rob"
      */
-    var wrap = _curry2(function wrap(functionForCurryOne, wrapper) {
+    const wrap = _curry2(function wrap(functionForCurryOne, wrapper) {
         return curryN(functionForCurryOne.length, function () {
             return wrapper.apply(this, _concat([functionForCurryOne], arguments));
         });
@@ -3777,13 +3777,13 @@
      *      R.xprod([1, 2], ['a', 'b']); //=> [[1, 'a'], [1, 'b'], [2, 'a'], [2, 'b']]
      */
         // = xprodWith(prepend); (takes about 3 times as long...)
-    var xprod = _curry2(function xprod(a, b) {
+    const xprod = _curry2(function xprod(a, b) {
             // = xprodWith(prepend); (takes about 3 times as long...)
-            var idx = -1;
-            var ilen = a.length;
-            var j;
-            var jlen = b.length;
-            var result = [];
+            let idx = -1;
+            let ilen = a.length;
+            let j;
+            let jlen = b.length;
+            let result = [];
             while (++idx < ilen) {
                 j = -1;
                 while (++j < jlen) {
@@ -3813,10 +3813,10 @@
      *
      *      R.zip([1, 2, 3], ['a', 'b', 'c']); //=> [[1, 'a'], [2, 'b'], [3, 'c']]
      */
-    var zip = _curry2(function zip(a, b) {
-        var rv = [];
-        var idx = -1;
-        var len = Math.min(a.length, b.length);
+    const zip = _curry2(function zip(a, b) {
+        let rv = [];
+        let idx = -1;
+        let len = Math.min(a.length, b.length);
         while (++idx < len) {
             rv[idx] = [
                 a[idx],
@@ -3840,8 +3840,8 @@
      *
      *      R.zipObj(['a', 'b', 'c'], [1, 2, 3]); //=> {a: 1, b: 2, c: 3}
      */
-    var zipObj = _curry2(function zipObj(keys, values) {
-        var idx = -1, len = keys.length, out = {};
+    const zipObj = _curry2(function zipObj(keys, values) {
+        let idx = -1, len = keys.length, out = {};
         while (++idx < len) {
             out[keys[idx]] = values[idx];
         }
@@ -3870,8 +3870,8 @@
      *      R.zipWith(f, [1, 2, 3], ['a', 'b', 'c']);
      *      //=> [f(1, 'a'), f(2, 'b'), f(3, 'c')]
      */
-    var zipWith = _curry3(function zipWith(functionForCurryOne, a, b) {
-        var rv = [], idx = -1, len = Math.min(a.length, b.length);
+    const zipWith = _curry3(function zipWith(functionForCurryOne, a, b) {
+        let rv = [], idx = -1, len = Math.min(a.length, b.length);
         while (++idx < len) {
             rv[idx] = functionForCurryOne(a[idx], b[idx]);
         }
@@ -3891,7 +3891,7 @@
      *
      *      R.F(); //=> false
      */
-    var F = always(false);
+    const F = always(false);
 
     /**
      * A function that always returns `true`. Any passed in parameters are ignored.
@@ -3906,13 +3906,13 @@
      *
      *      R.T(); //=> true
      */
-    var T = always(true);
+    const T = always(true);
 
-    var _append = function _append(el, list) {
+    const _append = function _append(el, list) {
         return _concat(list, [el]);
     };
 
-    var _assocPath = function _assocPath(path, val, obj) {
+    const _assocPath = function _assocPath(path, val, obj) {
         switch (path.length) {
             case 0:
                 return obj;
@@ -3932,10 +3932,10 @@
      * @param {Array} refTo Array containing the copied source references
      * @return {*} The copied value.
      */
-    var _baseCopy = function _baseCopy(value, refFrom, refTo) {
-        var copy = function copy(copiedValue) {
-            var len = refFrom.length;
-            var idx = -1;
+    const _baseCopy = function _baseCopy(value, refFrom, refTo) {
+        const copy = function copy(copiedValue) {
+            let len = refFrom.length;
+            let idx = -1;
             while (++idx < len) {
                 if (value === refFrom[idx]) {
                     return refTo[idx];
@@ -3943,7 +3943,7 @@
             }
             refFrom[idx + 1] = value;
             refTo[idx + 1] = copiedValue;
-            for (var key in value) {
+            for (let key in value) {
                 copiedValue[key] = _baseCopy(value[key], refFrom, refTo);
             }
             return copiedValue;
@@ -3972,22 +3972,22 @@
      * @param {String} methodname property to check for a custom implementation
      * @return {Object} Whatever the return value of the method is.
      */
-    var _checkForMethod = function _checkForMethod(methodname, functionForCurryOne) {
+    const _checkForMethod = function _checkForMethod(methodname, functionForCurryOne) {
         return function () {
-            var length = arguments.length;
+            let length = arguments.length;
             if (length === 0) {
                 return functionForCurryOne();
             }
-            var obj = arguments[length - 1];
+            let obj = arguments[length - 1];
             return _isArray(obj) || typeof obj[methodname] !== 'function' 
             ? functionForCurryOne(...arguments)
             : obj[methodname](..._slice(arguments, 0, length - 1));
         };
     };
 
-    var _composeL = function _composeL(innerLens, outerLens) {
+    const _composeL = function _composeL(innerLens, outerLens) {
         return lens(_compose(innerLens, outerLens), function (x, source) {
-            var newInnerValue = innerLens.set(x, outerLens(source));
+            let newInnerValue = innerLens.set(x, outerLens(source));
             return outerLens.set(newInnerValue, source);
         });
     };
@@ -4015,10 +4015,10 @@
      *          // the result is now 50.
      *        });
      */
-    var _composeP = function _composeP(f, g) {
+    const _composeP = function _composeP(f, g) {
         return function () {
-            var context = this;
-            var value = g.apply(this, arguments);
+            let context = this;
+            let value = g.apply(this, arguments);
             if (_isThenable(value)) {
                 return value.then(function (result) {
                     return f.call(context, result);
@@ -4029,7 +4029,7 @@
         };
     };
 
-    var _contains = function _contains(a, list) {
+    const _contains = function _contains(a, list) {
         return _indexOf(list, a) >= 0;
     };
 
@@ -4037,11 +4037,11 @@
      * Returns a function that makes a multi-argument version of compose from
      * either _compose or _composeP.
      */
-    var _createComposer = function _createComposer(composeFunction) {
+    const _createComposer = function _createComposer(composeFunction) {
         return function () {
-            var idx = arguments.length - 1;
-            var functionForCurryOne = arguments[idx];
-            var length = functionForCurryOne.length;
+            let idx = arguments.length - 1;
+            let functionForCurryOne = arguments[idx];
+            let length = functionForCurryOne.length;
             while (--idx >= 0) {
                 functionForCurryOne = composeFunction(arguments[idx], functionForCurryOne);
             }
@@ -4060,9 +4060,9 @@
      * @category Math
      * @return {Function}
      */
-    var _createMaxMin = function _createMaxMin(comparator, initialVal) {
+    const _createMaxMin = function _createMaxMin(comparator, initialVal) {
         return _curry1(function (list) {
-            var idx = -1, winner = initialVal, computed;
+            let idx = -1, winner = initialVal, computed;
             while (++idx < list.length) {
                 computed = +list[idx];
                 if (comparator(computed, winner)) {
@@ -4073,9 +4073,9 @@
         });
     };
 
-    var _createPartialApplicator = function _createPartialApplicator(concat) {
+    const _createPartialApplicator = function _createPartialApplicator(concat) {
         return function (functionForCurryOne) {
-            var args = _slice(arguments, 1);
+            let args = _slice(arguments, 1);
             return arity(Math.max(0, functionForCurryOne.length - args.length), function () {
                 return functionForCurryOne.apply(this, concat(args, arguments));
             });
@@ -4096,20 +4096,20 @@
      * @param {Function} functionForCurryOne default ramda implementation
      * @return {Function} A function that dispatches on object in list position
      */
-    var _dispatchable = function _dispatchable(methodname, xf, functionForCurryOne) {
+    const _dispatchable = function _dispatchable(methodname, xf, functionForCurryOne) {
         return function () {
-            var length = arguments.length;
+            let length = arguments.length;
             if (length === 0) {
                 return functionForCurryOne();
             }
-            var obj = arguments[length - 1];
+            let obj = arguments[length - 1];
             if (!_isArray(obj)) {
-                var args = _slice(arguments, 0, length - 1);
+                let args = _slice(arguments, 0, length - 1);
                 if (typeof obj[methodname] === 'function') {
                     return obj[methodname](args);
                 }
                 if (_isTransformer(obj)) {
-                    var transducer = xf(...args);
+                    let transducer = xf(...args);
                     return transducer(obj);
                 }
             }
@@ -4117,17 +4117,17 @@
         };
     };
 
-    var _dissocPath = function _dissocPath(path, obj) {
+    const _dissocPath = function _dissocPath(path, obj) {
         switch (path.length) {
             case 0:
                 return obj;
             case 1:
                 return _dissoc(path[0], obj);
-            default:
-                var head = path[0];
-                var tail = _slice(path, 1);
+            default:{
+                let head = path[0];
+                let tail = _slice(path, 1);
                 return obj[head] == null ? obj : _assoc(head, _dissocPath(tail, obj[head]), obj);
-        }
+        }}
     };
 
     /**
@@ -4147,7 +4147,7 @@
      *      _hasMethod('shout', person); //=> true
      *      _hasMethod('foo', person); //=> false
      */
-    var _hasMethod = function _hasMethod(methodName, obj) {
+    const _hasMethod = function _hasMethod(methodName, obj) {
         return obj != null && !_isArray(obj) && typeof obj[methodName] === 'function';
     };
 
@@ -4157,9 +4157,9 @@
      *
      * @private
      */
-    var _makeFlat = function _makeFlat(recursive) {
+    const _makeFlat = function _makeFlat(recursive) {
         return function flatt(list) {
-            var value, result = [], idx = -1, j, ilen = list.length, jlen;
+            let value, result = [], idx = -1, j, ilen = list.length, jlen;
             while (++idx < ilen) {
                 if (isArrayLike(list[idx])) {
                     value = recursive ? flatt(list[idx]) : list[idx];
@@ -4176,9 +4176,9 @@
         };
     };
 
-    var _reduce = function () {
+    const _reduce = function () {
         function _arrayReduce(xf, acc, list) {
-            var idx = -1, len = list.length;
+            let idx = -1, len = list.length;
             while (++idx < len) {
                 acc = xf['@@transducer/step'](acc, list[idx]);
                 if (acc?.['@@transducer/reduced']) {
@@ -4189,7 +4189,7 @@
             return xf['@@transducer/result'](acc);
         }
         function _iterableReduce(xf, acc, iter) {
-            var step = iter.next();
+            let step = iter.next();
             while (!step.done) {
                 acc = xf['@@transducer/step'](acc, step.value);
                 if (acc?.['@@transducer/reduced']) {
@@ -4203,7 +4203,7 @@
         function _methodReduce(xf, acc, obj) {
             return xf['@@transducer/result'](obj.reduce(bind(xf['@@transducer/step'], xf), acc));
         }
-        var symIterator = typeof Symbol !== 'undefined' ? Symbol.iterator : '@@iterator';
+        const symIterator = typeof Symbol !== 'undefined' ? Symbol.iterator : '@@iterator';
         return function _reduce(functionForCurryOne, acc, list) {
             if (typeof functionForCurryOne === 'function') {
                 functionForCurryOne = _xwrap(functionForCurryOne);
@@ -4224,7 +4224,7 @@
         };
     }();
 
-    var _xall = function () {
+    const _xall = function () {
         function XAll(f, xf) {
             this.xf = xf;
             this.f = f;
@@ -4249,7 +4249,7 @@
         });
     }();
 
-    var _xany = function () {
+    const _xany = function () {
         function XAny(f, xf) {
             this.xf = xf;
             this.f = f;
@@ -4274,7 +4274,7 @@
         });
     }();
 
-    var _xdrop = function () {
+    const _xdrop = function () {
         function XDrop(n, xf) {
             this.xf = xf;
             this.n = n;
@@ -4293,7 +4293,7 @@
         });
     }();
 
-    var _xdropWhile = function () {
+    const _xdropWhile = function () {
         function XDropWhile(f, xf) {
             this.xf = xf;
             this.f = f;
@@ -4314,7 +4314,7 @@
         });
     }();
 
-    var _xgroupBy = function () {
+    const _xgroupBy = function () {
         function XGroupBy(f, xf) {
             this.xf = xf;
             this.f = f;
@@ -4322,7 +4322,7 @@
         }
         XGroupBy.prototype['@@transducer/init'] = _xfBase.init;
         XGroupBy.prototype['@@transducer/result'] = function (result) {
-            var key;
+            let key;
             for (key in this.inputs) {
                 if (_has(key, this.inputs)) {
                     result = this.xf['@@transducer/step'](result, this.inputs[key]);
@@ -4335,7 +4335,7 @@
             return this.xf['@@transducer/result'](result);
         };
         XGroupBy.prototype['@@transducer/step'] = function (result, input) {
-            var key = this.f(input);
+            let key = this.f(input);
             this.inputs[key] = this.inputs[key] || [
                 key,
                 []
@@ -4370,7 +4370,7 @@
      *      R.all(lessThan2)([1, 2]); //=> false
      *      R.all(lessThan3)([1, 2]); //=> true
      */
-    var all = _curry2(_dispatchable('all', _xall, _all));
+    const all = _curry2(_dispatchable('all', _xall, _all));
 
     /**
      * A function that returns the first argument if it's falsy otherwise the second
@@ -4392,7 +4392,7 @@
      *      R.and(0, []); //=> 0
      *      R.and(null, ''); => null
      */
-    var and = _curry2(function and(a, b) {
+    const and = _curry2(function and(a, b) {
         return _hasMethod('and', a) ? a.and(b) : a && b;
     });
 
@@ -4418,7 +4418,7 @@
      *      R.any(lessThan0)([1, 2]); //=> false
      *      R.any(lessThan2)([1, 2]); //=> true
      */
-    var any = _curry2(_dispatchable('any', _xany, _any));
+    const any = _curry2(_dispatchable('any', _xany, _any));
 
     /**
      * Returns a new list containing the contents of the given list, followed by the given
@@ -4438,7 +4438,7 @@
      *      R.append('tests', []); //=> ['tests']
      *      R.append(['tests'], ['write', 'more']); //=> ['write', 'more', ['tests']]
      */
-    var append = _curry2(_append);
+    const append = _curry2(_append);
 
     /**
      * Makes a shallow clone of an object, setting or overriding the nodes
@@ -4459,7 +4459,7 @@
      *
      *      R.assocPath(['a', 'b', 'c'], 42, {a: {b: {c: 0}}}); //=> {a: {b: {c: 42}}}
      */
-    var assocPath = _curry3(_assocPath);
+    const assocPath = _curry3(_assocPath);
 
     /**
      * Wraps a function of any arity (including nullary) in a function that accepts exactly 2
@@ -4485,7 +4485,7 @@
      *      // Only 2 arguments are passed to the wrapped function
      *      takesTwoArgs(1, 2, 3); //=> [1, 2, undefined]
      */
-    var binary = _curry1(function binary(functionForCurryOne) {
+    const binary = _curry1(function binary(functionForCurryOne) {
         return nAry(2, functionForCurryOne);
     });
 
@@ -4506,7 +4506,7 @@
      *      var objectsClone = R.clone(objects);
      *      objects[0] === objectsClone[0]; //=> false
      */
-    var clone = _curry1(function clone(value) {
+    const clone = _curry1(function clone(value) {
         return _baseCopy(value, [], []);
     });
 
@@ -4538,7 +4538,7 @@
      *      //≅ triple(double(square(5)))
      *      squareThenDoubleThenTriple(5); //=> 150
      */
-    var compose = _createComposer(_compose);
+    const compose = _createComposer(_compose);
 
     /**
      * Creates a new lens that allows getting and setting values of nested properties, by
@@ -4567,9 +4567,9 @@
      *      secondOfXOfHeadLens(source); //=> 1
      *      secondOfXOfHeadLens.set(123, source); //=> [{x: [0, 123], y: [2, 3]}, {x: [4, 5], y: [6, 7]}]
      */
-    var composeL = function () {
-        var idx = arguments.length - 1;
-        var functionForCurryOne = arguments[idx];
+    const composeL = function () {
+        let idx = arguments.length - 1;
+        let functionForCurryOne = arguments[idx];
         while (--idx >= 0) {
             functionForCurryOne = _composeL(arguments[idx], functionForCurryOne);
         }
@@ -4608,7 +4608,7 @@
      *          // result is 150
      *        });
      */
-    var composeP = _createComposer(_composeP);
+    const composeP = _createComposer(_composeP);
 
     /**
      * Returns a new list consisting of the elements of the first list followed by the elements
@@ -4631,7 +4631,7 @@
      *      R.concat([4, 5, 6], [1, 2, 3]); //=> [4, 5, 6, 1, 2, 3]
      *      R.concat('ABC', 'DEF'); // 'ABCDEF'
      */
-    var concat = _curry2(function (set1, set2) {
+    const concat = _curry2(function (set1, set2) {
         if (_isArray(set2)) {
             return _concat(set1, set2);
         } else if (_hasMethod('concat', set1)) {
@@ -4664,7 +4664,7 @@
      *      var obj = {};
      *      R.contains(obj)([{}, obj, {}]); //=> true
      */
-    var contains = _curry2(_contains);
+    const contains = _curry2(_contains);
 
     /**
      * Returns a curried equivalent of the provided function. The curried
@@ -4708,7 +4708,7 @@
      *      var g = f(3);
      *      g(4); //=> 10
      */
-    var curry = _curry1(function curry(functionForCurryOne) {
+    const curry = _curry1(function curry(functionForCurryOne) {
         return curryN(functionForCurryOne.length, functionForCurryOne);
     });
 
@@ -4728,10 +4728,10 @@
      *      R.difference([1,2,3,4], [7,6,5,4,3]); //=> [1,2]
      *      R.difference([7,6,5,4,3], [1,2,3,4]); //=> [7,6,5]
      */
-    var difference = _curry2(function difference(first, second) {
-        var out = [];
-        var idx = -1;
-        var firstLen = first.length;
+    const difference = _curry2(function difference(first, second) {
+        let out = [];
+        let idx = -1;
+        let firstLen = first.length;
         while (++idx < firstLen) {
             if (!_contains(first[idx], second) && !_contains(first[idx], out)) {
                 out[out.length] = first[idx];
@@ -4757,7 +4757,7 @@
      *
      *      R.dissocPath(['a', 'b', 'c'], {a: {b: {c: 42}}}); //=> {a: {b: {}}}
      */
-    var dissocPath = _curry2(_dissocPath);
+    const dissocPath = _curry2(_dissocPath);
 
     /**
      * Returns a list containing all but the first `n` elements of the given `list`.
@@ -4776,7 +4776,7 @@
      *
      *      R.drop(3, [1,2,3,4,5,6,7]); //=> [4,5,6,7]
      */
-    var drop = _curry2(_dispatchable('drop', _xdrop, function drop(n, list) {
+    const drop = _curry2(_dispatchable('drop', _xdrop, function drop(n, list) {
         return n <= 0 ? list : _slice(list, n);
     }));
 
@@ -4804,8 +4804,8 @@
      *      R.dropWhile(lteTwo, [1, 2, 3, 4]); //=> [3, 4]
      */
     
-    var dropWhile = _curry2(_dispatchable('dropWhile', _xdropWhile, function dropWhile(pred, list) {
-        var idx = 0, len = list.length;
+    const dropWhile = _curry2(_dispatchable('dropWhile', _xdropWhile, function dropWhile(pred, list) {
+        let idx = 0, len = list.length;
         while (idx < len && pred(list[idx])) {
             idx++;
         }
@@ -4826,7 +4826,7 @@
      *
      *      R.empty([1,2,3,4,5]); //=> []
      */
-    var empty = _curry1(function empty(x) {
+    const empty = _curry1(function empty(x) {
         return _hasMethod('empty', x) ? x.empty() : [];
     });
 
@@ -4855,7 +4855,7 @@
      *      };
      *      R.filter(isEven, [1, 2, 3, 4]); //=> [2, 4]
      */
-    var filter = _curry2(_dispatchable('filter', _xfilter, _filter));
+    const filter = _curry2(_dispatchable('filter', _xfilter, _filter));
 
     /**
      * Returns the first element of the list which matches the predicate, or `undefined` if no
@@ -4878,9 +4878,9 @@
      *      R.find(R.propEq('a', 2))(xs); //=> {a: 2}
      *      R.find(R.propEq('a', 4))(xs); //=> undefined
      */
-    var find = _curry2(_dispatchable('find', _xfind, function find(functionForCurryOne, list) {
-        var idx = -1;
-        var len = list.length;
+    const find = _curry2(_dispatchable('find', _xfind, function find(functionForCurryOne, list) {
+        let idx = -1;
+        let len = list.length;
         while (++idx < len) {
             if (functionForCurryOne(list[idx])) {
                 return list[idx];
@@ -4909,9 +4909,9 @@
      *      R.findIndex(R.propEq('a', 2))(xs); //=> 1
      *      R.findIndex(R.propEq('a', 4))(xs); //=> -1
      */
-    var findIndex = _curry2(_dispatchable('findIndex', _xfindIndex, function findIndex(functionForCurryOne, list) {
-        var idx = -1;
-        var len = list.length;
+    const findIndex = _curry2(_dispatchable('findIndex', _xfindIndex, function findIndex(functionForCurryOne, list) {
+        let idx = -1;
+        let len = list.length;
         while (++idx < len) {
             if (functionForCurryOne(list[idx])) {
                 return idx;
@@ -4941,8 +4941,8 @@
      *      R.findLast(R.propEq('a', 1))(xs); //=> {a: 1, b: 1}
      *      R.findLast(R.propEq('a', 4))(xs); //=> undefined
      */
-    var findLast = _curry2(_dispatchable('findLast', _xfindLast, function findLast(functionForCurryOne, list) {
-        var idx = list.length;
+    const findLast = _curry2(_dispatchable('findLast', _xfindLast, function findLast(functionForCurryOne, list) {
+        let idx = list.length;
         while (--idx >= 0) {
             if (functionForCurryOne(list[idx])) {
                 return list[idx];
@@ -4971,8 +4971,8 @@
      *      R.findLastIndex(R.propEq('a', 1))(xs); //=> 1
      *      R.findLastIndex(R.propEq('a', 4))(xs); //=> -1
      */
-    var findLastIndex = _curry2(_dispatchable('findLastIndex', _xfindLastIndex, function findLastIndex(functionForCurryOne, list) {
-        var idx = list.length;
+    const findLastIndex = _curry2(_dispatchable('findLastIndex', _xfindLastIndex, function findLastIndex(functionForCurryOne, list) {
+        let idx = list.length;
         while (--idx >= 0) {
             if (functionForCurryOne(list[idx])) {
                 return idx;
@@ -4996,7 +4996,7 @@
      *      R.flatten([1, 2, [3, 4], 5, [6, [7, 8, [9, [10, 11], 12]]]]);
      *      //=> [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
      */
-    var flatten = _curry1(_makeFlat(true));
+    const flatten = _curry1(_makeFlat(true));
 
     /**
      * Returns a new function much like the supplied one, except that the first two arguments'
@@ -5018,9 +5018,9 @@
      *
      *      R.flip(mergeThree)(1, 2, 3); //=> [2, 1, 3]
      */
-    var flip = _curry1(function flip(functionForCurryOne) {
+    const flip = _curry1(function flip(functionForCurryOne) {
         return curry(function (a, b) {
-            var args = _slice(arguments);
+            let args = _slice(arguments);
             args[0] = b;
             args[1] = a;
             return functionForCurryOne.apply(this, args);
@@ -5044,7 +5044,7 @@
      *      var F = function() { this.x = function(){}; this.y = 1; }
      *      F.prototype.z = function() {};
      *      F.prototype.a = 100;
-     *      R.functionsIn(new F()); //=> ["x", "z"]
+     *      R.functionsIn(new F()); //=> ["x", "z"]  
      */
     var functionsIn = _curry1(_functionsWith(keysIn));
 
