@@ -178,12 +178,24 @@ require(["ramda", "webgl_helpers", "functional_utils"], function(r, w, fun) {
         return true;
     };
 
+
+
+    const LIMIT_RANDOM_NUMBER_32_BIT_INT=4294967296+1
+
+    const  getSecureRandomNumber = function() {
+        const array = new Uint32Array(1);
+        window.crypto.getRandomValues(array);
+        let randomNumber = array[0]/LIMIT_RANDOM_NUMBER_32_BIT_INT;
+        return randomNumber;
+    };
+
     var rand = function(min, max) {
+        let secureRandomNumber=getSecureRandomNumber()
         if (max === undefined) {
             max = min;
             min = 0;
         }
-        return min + Math.random() * (max - min);
+        return min + secureRandomNumber* (max - min);
     };
 
     var chance = function(chance) {
