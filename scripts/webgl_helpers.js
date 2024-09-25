@@ -1,13 +1,13 @@
 define(function() {
     "use strict";
 
-    var w = {};
+    const w = {};
 
     w.compileShader = function(gl, shaderSource, shaderType) {
-        var shader = gl.createShader(shaderType);
+        const shader = gl.createShader(shaderType);
         gl.shaderSource(shader, shaderSource);
         gl.compileShader(shader);
-        var success = gl.getShaderParameter(shader, gl.COMPILE_STATUS);
+        const success = gl.getShaderParameter(shader, gl.COMPILE_STATUS);
         if (!success) {
             throw new Error("could not compile shader:" + gl.getShaderInfoLog(shader));
         }
@@ -15,11 +15,11 @@ define(function() {
     };
     
     w.createProgram = function(gl, vertexShader, fragmentShader) {
-        var program = gl.createProgram();
+        const program = gl.createProgram();
         gl.attachShader(program, vertexShader);
         gl.attachShader(program, fragmentShader);
         gl.linkProgram(program);
-        var success = gl.getProgramParameter(program, gl.LINK_STATUS);
+        const success = gl.getProgramParameter(program, gl.LINK_STATUS);
         if (!success) {
             throw new Error("program failed to link:" + gl.getProgramInfoLog(program));
         }
@@ -28,7 +28,7 @@ define(function() {
 
 
     w.shaderFromScript = function(gl, scriptId, opt_shaderType) {
-        var shaderText = document.getElementById(scriptId).text;
+        const shaderText = document.getElementById(scriptId).text;
         return w.compileShader(gl, shaderText, opt_shaderType);
     };
 
