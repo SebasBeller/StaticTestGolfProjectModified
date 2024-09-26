@@ -930,51 +930,17 @@
      *      // All arguments are passed through to the wrapped function
      *      takesOneArg(1, 2); //=> [1, 2]
      */
-    const arity = _curry2(function (n, functionForCurryOne) {
-        switch (n) {
-            case 0:
-                return function () {
-                    return functionForCurryOne.apply(this, arguments);
-                };
-            case 1:
-                return function (a0) {
-                    return functionForCurryOne.apply(this, arguments);
-                };
-            case 2:
-                return function (a0, a1) {
-                    return functionForCurryOne.apply(this, arguments);
-                };
-            case 3:
-                return function (a0, a1, a2) {
-                    return functionForCurryOne.apply(this, arguments);
-                };
-            case 4:
-                return function (a0, a1, a2, a3) {
-                    return functionForCurryOne.apply(this, arguments);
-                };
-            case 6:
-                return function (a0, a1, a2, a3, a4, a5) {
-                    return functionForCurryOne.apply(this, arguments);
-                };
-            case 7:
-                return function (a0, a1, a2, a3, a4, a5, a6) {
-                    return functionForCurryOne.apply(this, arguments);
-                };
-            case 8:
-                return function (a0, a1, a2, a3, a4, a5, a6, a7) {
-                    return functionForCurryOne.apply(this, arguments);
-                };
-            case 9:
-                return function (a0, a1, a2, a3, a4, a5, a6, a7, a8) {
-                    return functionForCurryOne.apply(this, arguments);
-                };
-            case 10:
-                return function (a0, a1, a2, a3, a4, a5, a6, a7, a8, a9) {
-                    return functionForCurryOne.apply(this, arguments);
-                };
-            default:
-                throw new Error('First argument to arity must be a non-negative integer no greater than ten');
+    
+    const arity = _curry2(function (n, functionForCurryOne,...args) {
+        if ([0,1,2,3,4,5,6,7,8,9,10].includes(n)){
+            return function(...args){
+             return functionForCurryOne.apply(this,arguments);    
+            }
+            
         }
+    
+            throw new Error('First argument to arity must be a non-negative integer no greater than ten');
+        
     });
 
     /**
@@ -2438,23 +2404,25 @@
                     return functionForCurryOne.call(this, a0, a1, a2, a3, a4, a5);
                 };
             case 7:
-                return function (a0, a1, a2, a3, a4, a5, a6) {
+                return function (...args) {
                     return functionForCurryOne.call(this, a0, a1, a2, a3, a4, a5, a6);
                 };
             case 8:
-                return function (a0, a1, a2, a3, a4, a5, a6, a7) {
+                return function (...args) {
                     return functionForCurryOne.call(this, a0, a1, a2, a3, a4, a5, a6, a7);
                 };
             case 9:
-                return function (a0, a1, a2, a3, a4, a5, a6, a7, a8) {
+                return function (...args) {
                     return functionForCurryOne.call(this, a0, a1, a2, a3, a4, a5, a6, a7, a8);
                 };
             case 10:
-                return function (a0, a1, a2, a3, a4, a5, a6, a7, a8, a9) {
+                return function (...args) {
                     return functionForCurryOne.call(this, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9);
                 };
-            default:
+            default:{
                 throw new Error('First argument to nAry must be a non-negative integer no greater than ten');
+            }
+                
         }
     });
 
@@ -6228,7 +6196,7 @@
         const transformers = _slice(arguments, 1);
         const tlen = transformers.length;
         return curry(arity(tlen, function () {
-            const args = [], idx = -1;
+            const args = []; let idx = -1;
             while (++idx < tlen) {
                 args[idx] = transformers[idx](arguments[idx]);
             }
@@ -6626,7 +6594,7 @@
                 return new Fn();
             };
         }
-        return curry(nAry(n, function ($0, $1, $2, $3, $4, $5, $6, $7, $8, $9) {
+        return curry(nAry(n, function (...args) {
             switch (arguments.length) {
                 case 1:
                     return new Fn($0);
@@ -6643,11 +6611,11 @@
                 case 7:
                     return new Fn($0, $1, $2, $3, $4, $5, $6);
                 case 8:
-                    return new Fn($0, $1, $2, $3, $4, $5, $6, $7);
+                    return new Fn(...args);
                 case 9:
-                    return new Fn($0, $1, $2, $3, $4, $5, $6, $7, $8);
+                    return new Fn(...args);
                 case 10:
-                    return new Fn($0, $1, $2, $3, $4, $5, $6, $7, $8, $9);
+                    return new Fn(...args);
             }
         }));
     });
