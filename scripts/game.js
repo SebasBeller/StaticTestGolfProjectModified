@@ -2,75 +2,75 @@ require(["ramda", "webgl_helpers", "functional_utils"], function(r, w, fun) {
     "use strict";
 
     //Constants
-    var minSegLen = 0.025;
-    var maxSegLen = 0.15;
-    var minGroundHeight = 0.1;
-    var maxGroundHeight = 0.45;
-    var flatChance = 0.6;
-    var gravity = [0, -0.2];
-    var ballRadius = 0.01;
-    var ballSectors = 16;
-    var bounceLoss = 0.3;
-    var canvas = document.getElementById("canvas");
-    var xpx = canvas.clientWidth;
-    var ypx = canvas.clientHeight;
-    var shotStrength = 1.5;
-    var holeFlatWidth = 0.01;
-    var halfHoleWidth = 0.02;
-    var holeWidth = holeFlatWidth + halfHoleWidth;
-    var holeDepth = 0.05;
-    var holePattern = [
+    const minSegLen = 0.025;
+    const maxSegLen = 0.15;
+    const minGroundHeight = 0.1;
+    const maxGroundHeight = 0.45;
+    const flatChance = 0.6;
+    const gravity = [0, -0.2];
+    const ballRadius = 0.01;
+    const ballSectors = 16;
+    const bounceLoss = 0.3;
+    const canvas = document.getElementById("canvas");
+    const xpx = canvas.clientWidth;
+    const ypx = canvas.clientHeight;
+    const shotStrength = 1.5;
+    const holeFlatWidth = 0.01;
+    const halfHoleWidth = 0.02;
+    const holeWidth = holeFlatWidth + halfHoleWidth;
+    const holeDepth = 0.05;
+    const holePattern = [
         [-holeFlatWidth - halfHoleWidth, 0], [-halfHoleWidth, 0],
         [-halfHoleWidth, -holeDepth], [halfHoleWidth, -holeDepth],
         [halfHoleWidth, 0], [holeFlatWidth + halfHoleWidth, 0]];
-    var gameSpeed = 0.0022;
-    var particleSize = 8;
-    var numParticles = 150;
-    var numTrails = 10;
-    var explosionSpeed = 0.1;
-    var numExplosions = 5;
-    var velocityThreshold = 0.02;
-    var toGroundThreshold = 0.002;
+    const gameSpeed = 0.0022;
+    const particleSize = 8;
+    const numParticles = 150;
+    const numTrails = 10;
+    const explosionSpeed = 0.1;
+    const numExplosions = 5;
+    const velocityThreshold = 0.02;
+    const toGroundThreshold = 0.002;
     //These are in milliseconds.
-    var explosionLife = 1100;
-    var explosionInterval = 200;
-    var newHoleDelay = 200; //after explosions
+    const explosionLife = 1100;
+    const explosionInterval = 200;
+    const newHoleDelay = 200; //after explosions
 
     //State
-    var program;
-    var gl;
-    var ballPosition;
-    var startingPosition;
-    var ballVelocity = [0, 0];
-    var lastTimestamp;
-    var currentLandscape;
-    var ballStill = true;
-    var shooting = false;
-    var celebrating = false;
-    var aimStartPos;
-    var aimEndPos;
-    var bottomOfHole;
-    var shots = 0;
-    var completed = 0;
-    var explosions = [];
-    var trailTimer = 0;
-    var trailTimerLimit = 20;
+    let program;
+    let gl;
+    let ballPosition;
+    let startingPosition;
+    let ballVelocity = [0, 0];
+    let lastTimestamp;
+    let currentLandscape;
+    let ballStill = true;
+    let shooting = false;
+    let celebrating = false;
+    let aimStartPos;
+    let aimEndPos;
+    let bottomOfHole;
+    let shots = 0;
+    let completed = 0;
+    let explosions = [];
+    let trailTimer = 0;
+    let trailTimerLimit = 20;
 
-    var translationMat = function (translation) {
+    const translationMat = function (translation) {
         return [[1, 0, translation[0]],
                [0, 1, translation[1]],
                [0, 0, 1]];
     };
 
-    var rotationMat = function (angle) {
-        var c = Math.cos(angle);
-        var s = Math.sin(angle);
+    const rotationMat = function (angle) {
+        let c = Math.cos(angle);
+        let s = Math.sin(angle);
         return [[c, -s, 0],
                [s, c, 0],
                [0, 0, 1]];
     };
 
-    var scaleMat = function (scale) {
+    const scaleMat = function (scale) {
         if (typeof scale === "number") {
             scale = [scale, scale];
         }
@@ -79,15 +79,14 @@ require(["ramda", "webgl_helpers", "functional_utils"], function(r, w, fun) {
                [0, 0, 1]];
     };
 
-    var transpose = function(matrix) {
+    const transpose = function(matrix) {
         return fun.apply(fun.map, fun.array, matrix);
     };
 
-    var matrixMul = function () {
-        var mul2 = function(a, b) {
-            var tb = transpose(b);
-            var result = [];
-
+    const matrixMul = function () {
+        const mul2 = function(a, b) {
+            let tb = transpose(b);
+            let result = [];
             for (const row of a) {
                 for (const col of tb) {
                     result.push(dot(row, col));
@@ -98,76 +97,76 @@ require(["ramda", "webgl_helpers", "functional_utils"], function(r, w, fun) {
         return fun.reduce(mul2, arguments);
     };
 
-    var rotateVec = function(v, angle) {
-        var x = v[0];
-        var y = v[1];
+    const rotateVec = function(v, angle) {
+        let x = v[0];
+        let y = v[1];
         return [x * Math.cos(angle) - y * Math.sin(angle),
                x * Math.sin(angle) + y * Math.cos(angle)];
     };
 
-    var add = function() {
+    const add = function() {
         return r.reduce(function (x, y) {return x + y;}, 0, arguments);
     };
 
-    var sub = function() {
-        var sub2 = function (x, y) {return x - y;};
+    const sub = function() {
+        const sub2 = function (x, y) {return x - y;};
         if (arguments.length < 2) {
             return r.reduce(sub2, 0, arguments);
         }
         return fun.reduce(sub2, arguments);
     };
 
-    var mul = function() {
+    const mul = function() {
         return r.reduce(function (x, y) {return x * y;}, 1, arguments);
     };
 
-    var scaleVec = function(s, v) {
+    const scaleVec = function(s, v) {
         return r.map(r.multiply(s), v);
     };
 
-    var vecAdd = function(u, v) {
+    const vecAdd = function(u, v) {
         return fun.map(add, u, v);
     };
 
-    var vecSub = function(u, v) {
+    const vecSub = function(u, v) {
         return fun.map(sub, u, v);
     };
 
-    var magnitude = function(v) {
-        var sq = function(x) {return x * x;};
+    const magnitude = function(v) {
+        let sq = function(x) {return x * x;};
         return Math.sqrt(r.apply(add, r.map(sq, v)));
     };
 
-    var normalize = function(v) {
+    const normalize = function(v) {
         return scaleVec(1 / magnitude(v), v);
     };
 
-    var dot = function(u, v) {
+    const dot = function(u, v) {
         return r.apply(add, fun.map(mul, u, v));
     };
 
-    var angleBetween = function(u, v) {
+    const angleBetween = function(u, v) {
         return Math.acos(dot(normalize(u), normalize(v)));
     };
 
-    var signedAngleBetween = function(u, v) {
+    const signedAngleBetween = function(u, v) {
         u = normalize(u);
         v = normalize(v);
         return Math.asin(u[0] * v[1] - u[1] * v[0]);
     };
 
-    var linesIntersect = function(l1, l2) {
-        var points = [l1[0], l2[0], l1[1], l2[1]];
-        for (var i = 0; i < 4; i++) {
-            var p = points[i];
+    const linesIntersect = function(l1, l2) {
+        let points = [l1[0], l2[0], l1[1], l2[1]];
+        for (let i = 0; i < 4; i++) {
+            let p = points[i];
             //These are the vectors to the 3 other points from p,
             //vo being to the point on the same line as p.
-            var v1 = vecSub(points[(i + 1) % 4], p);
-            var vo = vecSub(points[(i + 2) % 4], p);
-            var v2 = vecSub(points[(i + 3) % 4], p);
-            var angle12 = angleBetween(v1, v2);
-            var angleo1 = angleBetween(vo, v1);
-            var angleo2 = angleBetween(vo, v2);
+            let v1 = vecSub(points[(i + 1) % 4], p);
+            let vo = vecSub(points[(i + 2) % 4], p);
+            let v2 = vecSub(points[(i + 3) % 4], p);
+            let angle12 = angleBetween(v1, v2);
+            let angleo1 = angleBetween(vo, v1);
+            let angleo2 = angleBetween(vo, v2);
             //The angle between v1 and v2 can not be smaller than the angle
             //between vo and v1 or vo and v2, because the vector vo (to the
             //point on the same line as p) has to be in the middle.
@@ -189,7 +188,7 @@ require(["ramda", "webgl_helpers", "functional_utils"], function(r, w, fun) {
         return randomNumber;
     };
 
-    var rand = function(min, max) {
+    const rand = function(min, max) {
         let secureRandomNumber=getSecureRandomNumber()
         if (max === undefined) {
             max = min;
@@ -198,18 +197,18 @@ require(["ramda", "webgl_helpers", "functional_utils"], function(r, w, fun) {
         return min + secureRandomNumber* (max - min);
     };
 
-    var chance = function(chance) {
+    const chance = function(chance) {
         return rand(1) < chance;
 
     };
 
-    var randomPoint = function() {
+    const randomPoint = function() {
         return [rand(minSegLen, maxSegLen),
                rand(minGroundHeight, maxGroundHeight)];
     };
 
     //flatChance === 1 means every second segment becomes flat.
-    var insertFlatSegments = function(flatChance, points) {
+    const insertFlatSegments = function(flatChance, points) {
         return fun.mapcat(
                 function (p) {
                     return chance(flatChance) ? [p, [rand(minSegLen, maxSegLen), p[1]]] : [p];
@@ -217,64 +216,64 @@ require(["ramda", "webgl_helpers", "functional_utils"], function(r, w, fun) {
                 points);
     };
 
-    var epilocation = function(pos, ground) {
-        var x = pos[0];
-        var line = function findLine(i) {
+    const epilocation = function(pos, ground) {
+        let x = pos[0];
+        let line = function findLine(i) {
             if (ground[i][0] > x) {
                 return [ground[i - 1], ground[i]];
             }
             return findLine(i + 1);
         }(0);
-        var p = line[0];
-        var q = line[1];
-        var y = p[1] + (x - p[0]) / (q[0] - p[0]) * (q[1] - p[1]);
+        let p = line[0];
+        let q = line[1];
+        let y = p[1] + (x - p[0]) / (q[0] - p[0]) * (q[1] - p[1]);
         return [x, y];
     };
 
-    var distanceToGround = function(pos, ground) {
+    const distanceToGround = function(pos, ground) {
         return magnitude(vecSub(pos, epilocation(pos, ground)));
     };
 
-    var landscape = function() {
-        var points = insertFlatSegments(flatChance,
+    const landscape = function() {
+        let points = insertFlatSegments(flatChance,
                 fun.cons([0, 0.4],
                     fun.repeatedly(1 / minSegLen + 1, randomPoint)));
-        var lastPoint = points[0];
+        let lastPoint = points[0];
         return r.map(
                 function(p) {
-                    var newX = p[0] + lastPoint[0];
-                    var newP = r.update(0, newX, p);
+                    let newX = p[0] + lastPoint[0];
+                    let newP = r.update(0, newX, p);
                     lastPoint = newP;
                     return newP;
                 },
                 points);
     };
 
-    var toGlslFormat = function(matrix) {
+    const toGlslFormat = function(matrix) {
         return r.flatten(transpose(matrix));
     };
 
-    var drawGraphics = function(vertices, mode, color, transformation) {
+    const drawGraphics = function(vertices, mode, color, transformation) {
         transformation = transformation || {};
-        var translation = transformation.translation || [0, 0];
-        var rotation = transformation.rotation || 0;
-        var scale = transformation.scale || 1;
-        var matrix = matrixMul(
+        let translation = transformation.translation || [0, 0];
+        let rotation = transformation.rotation || 0;
+        let scale = transformation.scale || 1;
+        let matrix = matrixMul(
                 translationMat(translation),
                 rotationMat(rotation),
                 scaleMat(scale));
 
-        var matrixLoc = gl.getUniformLocation(program, "u_matrix");
+        let matrixLoc = gl.getUniformLocation(program, "u_matrix");
         gl.uniformMatrix3fv(matrixLoc, gl.FALSE, toGlslFormat(matrix));
-        var colorLoc = gl.getUniformLocation(program, "u_color");
+        let colorLoc = gl.getUniformLocation(program, "u_color");
         gl.uniform3fv(colorLoc, color);
-        var particleSizeLoc = gl.getUniformLocation(program, "u_pointSize");
+        let particleSizeLoc = gl.getUniformLocation(program, "u_pointSize");
         gl.uniform1f(particleSizeLoc, particleSize);
-        var useTextureLoc = gl.getUniformLocation(program, "u_useTexture");
+        let useTextureLoc = gl.getUniformLocation(program, "u_useTexture");
         gl.uniform1i(useTextureLoc, mode === gl.POINTS ? 1 : 0);
 
-        var positionLoc = gl.getAttribLocation(program, "a_position");
-        var buffer = gl.createBuffer();
+        let positionLoc = gl.getAttribLocation(program, "a_position");
+        let buffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices),
                 gl.STATIC_DRAW);
@@ -283,12 +282,12 @@ require(["ramda", "webgl_helpers", "functional_utils"], function(r, w, fun) {
         gl.drawArrays(mode, 0, r.length(vertices) / 2);
     };
 
-    var drawBall = function() {
-        var pointOnCircle = function(angle) {
+    const drawBall = function() {
+        const pointOnCircle = function(angle) {
             return [Math.cos(angle), Math.sin(angle)];
         };
 
-        var ballPoints = r.map(pointOnCircle,
+        let ballPoints = r.map(pointOnCircle,
                 r.map(function (factor) {return 2 * Math.PI / ballSectors * factor;},
                     r.range(0, ballSectors)));
 
@@ -298,83 +297,83 @@ require(["ramda", "webgl_helpers", "functional_utils"], function(r, w, fun) {
             translation: ballPosition});
     };
 
-    var drawGround = function() {
-        var pointsForDrawing = function(pair) {
-            var p = pair[0];
-            var q = pair[1]
-                var bp = [p[0], 0];
-            var bq = [q[0], 0];
+    const drawGround = function() {
+        const pointsForDrawing = function(pair) {
+            let p = pair[0];
+            let q = pair[1];
+            let bp = [p[0], 0];
+            let bq = [q[0], 0];
             return [p, q, bp,
                    bq, bp, q];
         };
 
-        var pairs = fun.partition(2, 1, currentLandscape);
-        var vertices = r.flatten(r.map(pointsForDrawing, pairs));
+        let pairs = fun.partition(2, 1, currentLandscape);
+        let vertices = r.flatten(r.map(pointsForDrawing, pairs));
         drawGraphics(vertices, gl.TRIANGLES, [0, 0.9, 0]);
     };
 
-    var drawAimLine = function() {
-        var aimEndPosVector = vecSub(aimEndPos, aimStartPos);
-        var line = [ballPosition, vecAdd(ballPosition, aimEndPosVector)];
+    const drawAimLine = function() {
+        let aimEndPosVector = vecSub(aimEndPos, aimStartPos);
+        let line = [ballPosition, vecAdd(ballPosition, aimEndPosVector)];
         drawGraphics(r.flatten(line), gl.LINES, [1, 1, 0]);
     };
 
-    var drawFlag = function() {
-        var w = 0.004;
-        var h = 0.09;
-        var fh = 0.03;
-        var fl = 0.04;
-        var pole = [[-w, h], [w, h], [-w, 0],
+    const drawFlag = function() {
+        let w = 0.004;
+        let h = 0.09;
+        let fh = 0.03;
+        let fl = 0.04;
+        let pole = [[-w, h], [w, h], [-w, 0],
             [w, h], [-w, 0], [w, 0]];
-        var flag = [[w, h], [w + fl, h - fh / 2], [w, h - fh]];
-        var transformation = {translation: bottomOfHole};
+        let flag = [[w, h], [w + fl, h - fh / 2], [w, h - fh]];
+        let transformation = {translation: bottomOfHole};
         drawGraphics(r.flatten(pole), gl.TRIANGLES, [0.8, 0.4, 0.2],
                 transformation);
         drawGraphics(r.flatten(flag), gl.TRIANGLES, [1, 0, 0],
                 transformation);
     };
 
-    var drawExplosion = function(exp) {
-        var pos = function(p) {
+    const drawExplosion = function(exp) {
+        const pos = function(p) {
             return p.position;
         };
-        var transformation = {translation: exp.position};
+        let transformation = {translation: exp.position};
         drawGraphics(r.flatten(r.map(pos, exp.particles)), gl.POINTS, [1, 1, 0],
                 transformation);
     };
 
-    var drawScene = function() {
+    const drawScene = function() {
         gl.clearColor(0.5, 0.5, 1.0, 1.0);
         gl.clear(gl.COLOR_BUFFER_BIT);
         drawGround();
         drawFlag();
         if (shooting) {
             drawAimLine();
-        };
+        }
         drawBall();
         explosions.forEach(drawExplosion);
     };
 
-    var updateScore = function() {
+    const updateScore = function() {
         document.getElementById("hole").innerHTML = (completed + 1);
         document.getElementById("shots").innerHTML = shots;
         document.getElementById("per-hole").innerHTML = shots / (completed + 1);
     };
 
-    var setupHole = function() {
-        var land = landscape();
-        var pointsNeeded = r.length(r.takeWhile(function (p) {return p[0] < 1;},
+    const setupHole = function() {
+        let land = landscape();
+        let pointsNeeded = r.length(r.takeWhile(function (p) {return p[0] < 1;},
                     land)) + 1;
         land = r.take(pointsNeeded, land);
 
         startingPosition = ballPosition = fun.updateNumber(1, 0.001,
                 epilocation([0.1, 1], land));
 
-        var holePos = epilocation([rand(0.7, 0.9), 1], land);
+        let holePos = epilocation([rand(0.7, 0.9), 1], land);
         bottomOfHole = fun.updateNumber(1, -holeDepth, holePos);
-        var before = [];
-        var after = land;
-        var hole = r.map(r.partial(vecAdd, holePos), holePattern);
+        let before = [];
+        let after = land;
+        let hole = r.map(r.partial(vecAdd, holePos), holePattern);
         currentLandscape = function insertHole(holeX) {
             if (after[0][0] > holeX) {
                 before = function fixBefore(before) {
@@ -402,46 +401,46 @@ require(["ramda", "webgl_helpers", "functional_utils"], function(r, w, fun) {
         }(holePos[0]);
     };
 
-    var mouseLocation = function(e) {
+    const mouseLocation = function(e) {
         return [e.layerX / xpx, 1 - e.layerY / ypx]
     };
 
-    var beginShooting = function(e) {
+    const beginShooting = function(e) {
         if (ballStill && !celebrating) {
             shooting = true;
             aimStartPos = mouseLocation(e);
         };
     };
 
-    var shoot = function(e) {
+    const shoot = function(e) {
         if (shooting) {
             shooting = false;
             ballStill = false;
-            var loc = mouseLocation(e);
+            let loc = mouseLocation(e);
             ballVelocity = scaleVec(shotStrength, vecSub(loc, aimStartPos));
             shots += 1;
             updateScore();
         };
     };
 
-    var aim = function(e) {
+    const aim = function(e) {
         aimEndPos = mouseLocation(e);
     };
 
-    var inHole = function(ball, hole) {
+    const inHole = function(ball, hole) {
         return magnitude(vecSub(ball, hole)) <= halfHoleWidth;
     };
 
-    var outOfBounds = function(pos) {
-        var x = pos[0];
+    const outOfBounds = function(pos) {
+        let x = pos[0];
         return x <= 0 || x >= 1;
     };
 
-    var addDeltaVector = function(delta, addition, to) {
+    const addDeltaVector = function(delta, addition, to) {
         return vecAdd(scaleVec(delta, addition), to);
     };
 
-    var bounce = function(delta) {
+    const bounce = function(delta) {
         if (outOfBounds(ballPosition)) {
             ballPosition = startingPosition;
             ballVelocity = [0, 0];
@@ -449,31 +448,31 @@ require(["ramda", "webgl_helpers", "functional_utils"], function(r, w, fun) {
             return;
         };
 
-        var findIntersectingSegment = function(line) {
+        const findIntersectingSegment = function(line) {
             return fun.first(r.filter(r.partial(linesIntersect, line),
                         fun.partition(2, 1, currentLandscape)));
         };
 
-        var addDeltaVectorPrim = r.partial(addDeltaVector, delta);
+        const addDeltaVectorPrim = r.partial(addDeltaVector, delta);
 
         ballVelocity = addDeltaVectorPrim(gravity, ballVelocity);
 
-        var calculateVelocity = function(velocity) {
-            var toGround = distanceToGround(ballPosition, currentLandscape);
+        const calculateVelocity = function(velocity) {
+            let toGround = distanceToGround(ballPosition, currentLandscape);
             if (magnitude(velocity) < velocityThreshold &&
                     toGround < toGroundThreshold) {
                 ballStill = true;
                 return [0, 0];
             }
 
-            var newPosition = addDeltaVectorPrim(velocity, ballPosition);
+            let newPosition = addDeltaVectorPrim(velocity, ballPosition);
 
-            var line = findIntersectingSegment([ballPosition, newPosition]);
+            let line = findIntersectingSegment([ballPosition, newPosition]);
             if (line) {
-                var surface = vecSub(line[1], line[0]);
-                var normal = rotateVec(surface, Math.PI / 2);
-                var reflectedVelocity = scaleVec(-1, velocity);
-                var angle = signedAngleBetween(reflectedVelocity, normal);
+                let surface = vecSub(line[1], line[0]);
+                let normal = rotateVec(surface, Math.PI / 2);
+                let reflectedVelocity = scaleVec(-1, velocity);
+                let angle = signedAngleBetween(reflectedVelocity, normal);
 
                 velocity = scaleVec(1 - bounceLoss,
                         rotateVec(reflectedVelocity, 2 * angle));
@@ -486,23 +485,23 @@ require(["ramda", "webgl_helpers", "functional_utils"], function(r, w, fun) {
         ballPosition = addDeltaVectorPrim(ballVelocity, ballPosition);
     };
 
-    var createParticle = function() {
-        var rand1 = r.partial(rand, -1, 1);
+    const createParticle = function() {
+        let rand1 = r.partial(rand, -1, 1);
         return {position: scaleVec(0.01, [rand1(), rand1()]),
             //Normalize a 3D vector to make the explosion look 3D
             velocity: fun.butlast(normalize([rand1(), rand1(), rand1()]))};
     };
 
-    var createExplosion = function(pos) {
+    const createExplosion = function(pos) {
         return {position: pos,
             particles: fun.repeatedly(numParticles, createParticle),
             explosionTime: 0,
             timeToLive: explosionLife};
     };
 
-    var updateParticle = function(delta, explosionTime, p) {
+    const updateParticle = function(delta, explosionTime, p) {
         //The speed of particles should decrease with time after explosion.
-        var speed = explosionSpeed / (Math.pow(explosionTime / 500 , 2) + 1);
+        let speed = explosionSpeed / (Math.pow(explosionTime / 500 , 2) + 1);
         //Multiply by game speed to make gravity and velocity calculations
         //similar to the ball's.
         delta *= gameSpeed;
@@ -515,8 +514,8 @@ require(["ramda", "webgl_helpers", "functional_utils"], function(r, w, fun) {
         return p;
     };
 
-    var spawnTrails = function(particles) {
-        var copy = function(p) {
+    const spawnTrails = function(particles) {
+        const copy = function(p) {
             return {position: r.map(r.identity, p.position),
                 velocity: [0, 0]};
         };
@@ -532,7 +531,7 @@ require(["ramda", "webgl_helpers", "functional_utils"], function(r, w, fun) {
         return particles;
     };
 
-    var updateExplosion = function(delta, exp) {
+    const updateExplosion = function(delta, exp) {
         //Explosions are completely removed after the celebration.
         if (exp.timeToLive <= 0) {
             exp.particles = [];
@@ -549,21 +548,21 @@ require(["ramda", "webgl_helpers", "functional_utils"], function(r, w, fun) {
         return exp;
     };
 
-    var celebrate = function() {
+    const celebrate = function() {
         celebrating = true;
-        var duration = (numExplosions - 1) * explosionInterval +
+        let duration = (numExplosions - 1) * explosionInterval +
             explosionLife + newHoleDelay;
-        var celebrationTime = 0;
-        var lastUpdate = performance.now();
-        var spawnedExplosions = 0;
+        let celebrationTime = 0;
+        let lastUpdate = performance.now();
+        let spawnedExplosions = 0;
 
-        var runCelebration = function(now) {
-            var delta = now - lastUpdate;
+        const runCelebration = function(now) {
+            let delta = now - lastUpdate;
             lastUpdate = now;
 
             celebrationTime += delta;
             if (celebrationTime > explosionInterval * spawnedExplosions) {
-                var pos = [0.7 + rand(-0.2, 0.2),
+                let pos = [0.7 + rand(-0.2, 0.2),
                     0.8 + rand(-0.1, 0.1)];
                 if (spawnedExplosions < numExplosions) {
                     explosions.push(createExplosion(pos));
@@ -592,7 +591,7 @@ require(["ramda", "webgl_helpers", "functional_utils"], function(r, w, fun) {
         window.requestAnimationFrame(runCelebration);
     };
 
-    var logic = function(delta) {
+    const logic = function(delta) {
         delta *= gameSpeed;
 
         if (!ballStill) {
@@ -605,26 +604,26 @@ require(["ramda", "webgl_helpers", "functional_utils"], function(r, w, fun) {
         }
     };
 
-    var gaussian = function(x) {
-        var c = 0.3;
+    const gaussian = function(x) {
+        let c = 0.3;
         return Math.exp(-x * x / (2 * c * c));
     };
 
-    var gaussianTexture = function(size) {
-        var result = [];
-        var mid = size/2 - 0.5;
+    const gaussianTexture = function(size) {
+        let result = [];
+        let mid = size/2 - 0.5;
         mid = [mid, mid];
-        var distToEdge = magnitude(mid);
-        var color = function(alpha) {
+        let distToEdge = magnitude(mid);
+        const color = function(alpha) {
             alpha *= 0.1;
-            var timesAlpha = function (x) {
+            const timesAlpha = function (x) {
                 return Math.floor(x * alpha);
             };
             return [255, 100 + timesAlpha(155),
                    timesAlpha(255 * alpha), timesAlpha(255)];
         };
-        for (var x = 0; x < size; x++) {
-            for (var y = 0; y < size; y++) {
+        for (let x = 0; x < size; x++) {
+            for (let y = 0; y < size; y++) {
                 result.push(color(gaussian(
                                 magnitude(vecSub([x, y], mid)) / distToEdge)));
             }
@@ -632,8 +631,8 @@ require(["ramda", "webgl_helpers", "functional_utils"], function(r, w, fun) {
         return result;
     };
 
-    var makeParticleTexture = function(gl) {
-        var texture = gl.createTexture();
+    const makeParticleTexture = function(gl) {
+        let texture = gl.createTexture();
         gl.bindTexture(gl.TEXTURE_2D, texture);
         gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, particleSize, particleSize, 0,
                 gl.RGBA, gl.UNSIGNED_BYTE,
@@ -641,8 +640,8 @@ require(["ramda", "webgl_helpers", "functional_utils"], function(r, w, fun) {
         gl.generateMipmap(gl.TEXTURE_2D);
     };
 
-    var mainLoop = function(now) {
-        var delta = now - lastTimestamp;
+    const mainLoop = function(now) {
+        let delta = now - lastTimestamp;
         lastTimestamp = now;
 
         if (celebrating) {
@@ -654,7 +653,7 @@ require(["ramda", "webgl_helpers", "functional_utils"], function(r, w, fun) {
         window.requestAnimationFrame(mainLoop);
     };
 
-    var main = function() {
+    const main = function() {
         canvas.onmousemove = aim;
         canvas.onmousedown = beginShooting;
         canvas.onmouseup = shoot;
