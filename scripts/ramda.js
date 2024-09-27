@@ -1855,9 +1855,7 @@
      *      R.isNaN({});         //=> false
      */
 
-    const numberIsNaN = _curry1(function numberIsNaN(x) {
-        return typeof x === 'number' && Number.isNaN(x); 
-    });
+    
 
 
     /**
@@ -1876,9 +1874,7 @@
      *      R.isNil(0); //=> false
      *      R.isNil([]); //=> false
      */
-    const isNil = _curry1(function isNil(x) {
-        return x == null;
-    });
+   
 
     /**
      * Returns `true` if all elements are unique, otherwise `false`.
@@ -1898,16 +1894,7 @@
      *      R.isSet([1, 1]);   //=> false
      *      R.isSet([{}, {}]); //=> true
      */
-    const isSet = _curry1(function isSet(list) {
-        const len = list.length;
-        let idx = -1;
-        while (++idx < len) {
-            if (_indexOf(list, list[idx], idx + 1) >= 0) {
-                return false;
-            }
-        }
-        return true;
-    });
+  
 
     /**
      * Returns a list containing the names of all the
@@ -1928,13 +1915,7 @@
      *      var f = new F();
      *      R.keysIn(f); //=> ['x', 'y']
      */
-    const keysIn = _curry1(function keysIn(obj) {
-        let prop, ks = [];
-        for (prop in obj) {
-            ks[ks.length] = prop;
-        }
-        return ks;
-    });
+  
 
     /**
      * Returns the position of the last occurrence of an item in
@@ -5014,7 +4995,9 @@
      *      F.prototype.a = 100;
      *      R.functionsIn(new F()); //=> ["x", "z"]  
      */
-    const functionsIn = _curry1(_functionsWith(keysIn));
+    
+    const functionsIn = _curry1(_functionsWith(Object.keys));
+
 
     /**
      * Splits a list into sub-lists stored in an object, based on the result of calling a String-returning function
@@ -5989,6 +5972,7 @@
     const takeWhile = _curry2(_dispatchable('takeWhile', _xtakeWhile, function takeWhile(functionForCurryOne, list) {
         let idx = -1, len = list.length;
         while (++idx < len && functionForCurryOne(list[idx])) {
+             // Empty block intentional: we only increment idx to find the cutoff point
         }
         return _slice(list, 0, idx);
     }));
@@ -7406,11 +7390,11 @@
         isArrayLike: isArrayLike,
         isEmpty: isEmpty,
         isNaN: Number.isNaN,
-        isNil: isNil,
-        isSet: isSet,
+        isNil: isNil=>null,
+        isSet: isSet=>null,
         join: join,
         keys: keys,
-        keysIn: keysIn,
+        keysIn: keysIn=>null,
         last: last,
         lastIndexOf: lastIndexOf,
         length: length,

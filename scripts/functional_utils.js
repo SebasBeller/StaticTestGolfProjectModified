@@ -1,13 +1,13 @@
 define(["ramda"], function(r) {
     "use strict";
 
-    var u = {};
+    const u = {};
 
     u.map = function(f) {
-        var result = [];
-        var lists = r.drop(1, arguments);
-        for (var i = 0; i < Math.min(...lists.map(list => list.length)); i++) {
-            var currents = r.map(r.nth(i), lists);
+        const result = [];
+        const lists = r.drop(1, arguments);
+        for (let i = 0; i < Math.min(...lists.map(list => list.length)); i++) {
+            const currents = r.map(r.nth(i), lists);
             if (r.all(r.compose(r.not, r.isNil), currents)) {
                 result.push(r.apply(f, currents))
             } else {
@@ -69,7 +69,7 @@ define(["ramda"], function(r) {
         if (coll === undefined) {
             return u.partition(n, n, step);
         }
-        var result = [];
+        const result = [];
         while (coll.length >= n) {
             result.push(r.take(n, coll));
             coll = r.drop(step, coll);
