@@ -255,8 +255,9 @@
         return (
             Boolean(hasNArguments(n, 0)) ||
             (Boolean(hasNArguments(n, 1)) && Boolean(isPlaceholder(a))) ||
-            (Boolean(hasNArguments(n, 2)) && Boolean(isPlaceholder(a)) && Boolean(isPlaceholder(b))) ||
-            (Boolean(hasNArguments(n, 3)) && Boolean(allOfParamsArePlaceHolders(a, b, c)))
+            (Boolean(hasNArguments(n, 2)) && Boolean(isPlaceholder(a))
+                && Boolean(isPlaceholder(b))) || (Boolean(hasNArguments(n, 3))
+                && Boolean(allOfParamsArePlaceHolders(a, b, c)))
         );
     }
 

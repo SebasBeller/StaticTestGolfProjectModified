@@ -31,6 +31,7 @@ require(["ramda", "webgl_helpers", "functional_utils"], function(r, w, fun) {
     const numExplosions = 5;
     const velocityThreshold = 0.02;
     const toGroundThreshold = 0.002;
+    
     //These are in milliseconds.
     const explosionLife = 1100;
     const explosionInterval = 200;
@@ -71,7 +72,7 @@ require(["ramda", "webgl_helpers", "functional_utils"], function(r, w, fun) {
     };
 
     const scaleMat = function (scale) {
-        if (typeof scale === "number") {
+        if (typeof scale == "number") {
             scale = [scale, scale];
         }
         return [[scale[0], 0, 0],
@@ -190,7 +191,7 @@ require(["ramda", "webgl_helpers", "functional_utils"], function(r, w, fun) {
 
     const rand = function(min, max) {
         let secureRandomNumber=getSecureRandomNumber()
-        if (max === undefined) {
+        if (max == undefined) {
             max = min;
             min = 0;
         }
@@ -359,6 +360,7 @@ require(["ramda", "webgl_helpers", "functional_utils"], function(r, w, fun) {
         document.getElementById("shots").innerHTML = shots;
         document.getElementById("per-hole").innerHTML = shots / (completed + 1);
     };
+
 
     const setupHole = function() {
         let land = landscape();

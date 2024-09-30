@@ -1,31 +1,42 @@
-A small JavaScript golf game
-============================
 
-- Load `game.html` to run
-- Use mouse to shoot when the ball is stationary
-- Can not currently be played on touch devices
-- Infinite holes/levels
 
-Uses [Ramda](http://ramdajs.com/0.14/index.html) and
-[RequireJS](http://requirejs.org/) (included).
+# Un juego de golf en JavaScript
 
-License
-=======
+Este es un sencillo juego de golf desarrollado en JavaScript con las siguientes características:
+- **Cargar el juego**: `game.html` para ejecutar el juego.
+- **Instrucciones**: Usa el ratón para disparar cuando la bola está inmóvil.
+- **Compatibilidad**: Actualmente no compatible con dispositivos táctiles.
+- **Niveles**: Presenta hoyos/niveles infinitos.
+- **Dependencias**: Utiliza Ramda y RequireJS (incluidos).
+- **Funcionamiento**:
 
-Copyright (C) 2020  Oskar Kvist
+  ![Inicio de la partida](./img/inicio.png)
+  ![Foto de la partida](./img/juego.png)
 
-This program is free software: you can redistribute it
-and/or modify it under the terms of the GNU General Public
-License as published by the Free Software Foundation, either
-version 3 of the License, or (at your option) any later
-version.
 
-This program is distributed in the hope that it will be
-useful, but WITHOUT ANY WARRANTY; without even the implied
-warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-PURPOSE. See the GNU General Public License for more
-details.
 
-You should have received a copy of the GNU General Public
-License along with this program. If not, see
-<https://www.gnu.org/licenses/>.
+## Autores
+- **Oskar Kvist**: Creador y desarrollador original.
+
+## Coautores
+- **Sebastian Beller, Susan Cespedes, Wilner Mena**: Coautor(es), responsable(s) de realizar el análisis estático del código con SonarQube, corregir errores y mejorar la calidad y mantenibilidad del código.
+
+## Contribuciones
+- **Análisis Estático con SonarQube**: Se realizó un análisis estático exhaustivo utilizando SonarQube. Este análisis identificó varios problemas relacionados con la **fiabilidad**, **mantenibilidad** y **seguridad** del código.
+- **Corrección de errores e implementaciones**:
+    - **Fiabilidad**: Se abordaron problemas que podían causar comportamientos inesperados o fallos, mejorando la robustez del código.
+    - **Mantenibilidad**: Se refactorizaron partes del código para mejorar su legibilidad y facilitar su mantenimiento futuro.
+    - **Seguridad**: Se identificaron y solucionaron puntos críticos de acceso de seguridad, asegurando un manejo más seguro de las entradas del usuario y reduciendo posibles vulnerabilidades.
+
+Estas mejoras resultaron en un código más estable, seguro y fácil de mantener.
+
+## Licencia
+Este proyecto está licenciado bajo la Licencia Pública General GNU, versión 3 (GPLv3).
+
+Copyright (C) 2020 Oskar Kvist
+
+Este programa es software libre: puedes redistribuirlo y/o modificarlo bajo los términos de la Licencia Pública General de GNU según lo publicado por la Free Software Foundation, ya sea la versión 3 de la licencia o (a tu elección) cualquier versión posterior.
+
+Este programa se distribuye con la esperanza de que sea útil, pero **SIN NINGUNA GARANTÍA**; ni siquiera la garantía implícita de **COMERCIABILIDAD** o **IDONEIDAD PARA UN PROPÓSITO PARTICULAR**. Consulta la Licencia Pública General de GNU para más detalles.
+
+Debes haber recibido una copia de la Licencia Pública General de GNU junto con este programa. Si no es así, consulta [https://www.gnu.org/licenses/](https://www.gnu.org/licenses/).
